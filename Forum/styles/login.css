@@ -1,0 +1,259 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+
+}
+
+
+body {
+    background: url("../images/backgroundImage.jpg") center center;
+    background-position: center;
+    background-size: auto;
+    background-attachment: fixed;
+}
+
+
+/*Cała nawigacja*/
+nav {
+    width: 100%;
+    height: 10%;
+    position: fixed;
+    background-color: #03071E;
+    z-index: 2;
+
+    /* FlexBox Container */
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Pierwszy segment nawigacji z logiem */
+#firstNavElement {
+    height: 100%;
+    width: 33.33%;
+
+    /* FlexBox Container */
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#siteLogo {
+
+    text-transform: uppercase;
+    width: 30%;
+    height: 100%;
+    color: white;
+    overflow: hidden;
+    cursor: pointer;
+
+    /* FlexBox Container */
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#firstLogoElement {
+    font-size: 2.9vw;
+    line-height: 100%;
+    border-bottom: 1px solid white;
+}
+
+#secondLogoElement {
+    font-size: 1.69vw;
+    line-height: 100%;
+}
+
+/* Drugi segment nawigacji - Wyszukiwanie */
+
+#secondNavElement {
+    height: 100%;
+    width: 33.33%;
+}
+
+/*Search Field*/
+#searchBox {
+    height: 50%;
+    width: 50%;
+    border-radius: 10px;
+    border: 0;
+    background-color: white;
+    position: relative;
+    top: 25%;
+    left: 25%;
+
+}
+
+/*Serach Field Placeholder*/
+#searchBox.empty {
+    font-size: 2vh;
+    text-align: center;
+    line-height: 100%;
+}
+
+
+/*Trzeci segment nawigacji - podstrony */
+#thirdNavElement {
+    height: 100%;
+    width: 33.33%;
+    color: white;
+    text-transform: uppercase;
+    font-size: 1vw;
+
+    /*Flexbox container dla 3 elementów podstron*/
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/*Podkreślenie podstrony w nawigacji w której się znajdujemy*/
+#thirdNavElement>a:nth-child(3) {
+    font-weight: 900;
+    border-bottom: 2px solid #B08968;
+}
+
+#thirdNavElement>a:nth-child(1)::before,
+#thirdNavElement>a:nth-child(2)::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background-color: #B08968;
+    transition: .5s;
+}
+
+#thirdNavElement>a:nth-child(1):hover::before,
+#thirdNavElement>a:nth-child(1):hover::before {
+    left: 0;
+}
+
+/* Odnośniki do podstron */
+
+#thirdNavElement>a {
+    position: relative;
+    border-style: none;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+#thirdNavElement>a:visited {
+    text-decoration: none;
+    color: white;
+    text-transform: none;
+}
+
+
+main {
+    width: 30vw;
+    height: 80vh;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    /*background-color: rgba(237, 224, 212, 0.9);*/
+    overflow: hidden;
+    border: 1px solid white;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --------------------------------------------------------------------*/
+
+header {
+    width: 100%;
+    height: 15%;
+    background-color: #E6CCB2;
+    font-size: 3vh;
+    text-transform: uppercase;
+    font-weight: 500;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#loginSection {
+    width: 100%;
+    height: 65%;
+    /* background-color: rgba(237, 224, 212, 0.8); */
+    position: relative;
+    z-index: 1;
+
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#loginSection>input {
+    width: 50%;
+    height: 10%;
+    margin-bottom: 5%;
+    text-align: center;
+    font-size: 2vh;
+    color: white;
+    font-weight: 600;
+    background-color: #B08968;
+    border: 0;
+}
+
+#loginSection>input::placeholder {
+    font-weight: 400;
+    color: black;
+}
+
+
+#loginSection>button {
+    width: 50%;
+    height: 10%;
+    margin-top: 10%;
+    background-color: #B08968;
+    border: 0;
+    font-size: 2vh;
+}
+
+
+
+/* PASEK MIĘDZY LOGIN SECTION A REGISTER SECTION */
+#loginSection::before {
+    content: "";
+    position: absolute;
+    left: 10%;
+    bottom: 0;
+    width: 80%;
+    border-bottom: 2px solid white;
+}
+
+footer {
+    width: 100%;
+    height: 20%;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+footer>a {
+    padding: 1vh;
+    font-size: 2vh;
+    color: white;
+}
