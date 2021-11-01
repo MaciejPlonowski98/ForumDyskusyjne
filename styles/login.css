@@ -175,12 +175,16 @@ main {
 /* --------------------------------------------------------------------*/
 
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 15%;
     background-color: #E6CCB2;
     font-size: 3vh;
     text-transform: uppercase;
     font-weight: 500;
+    z-index: 2;
 
     display: flex;
     flex-flow: column nowrap;
@@ -195,6 +199,9 @@ header {
     /* background-color: rgba(237, 224, 212, 0.8); */
     position: relative;
     z-index: 1;
+    transition: 1s;
+    top: 15%;
+    left: 0;
 
 
     display: flex;
@@ -243,8 +250,12 @@ header {
 }
 
 footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 20%;
+    transition: 1s;
 
     display: flex;
     flex-flow: column nowrap;
@@ -256,4 +267,45 @@ footer>a {
     padding: 1vh;
     font-size: 2vh;
     color: white;
+    cursor: pointer;
+}
+
+/*-------- KLIKNIECIE NA REJESTRUJ SIĘ POWODUJE ------ */
+#loginSection.active {
+    position: relative;
+    height: 0;
+    left: 0;
+    top: -100%;
+}
+
+#registerAccountBox {
+    transition: 1s;
+
+    position: relative;
+    top: 100%;
+    left: 0;
+
+    height: 65%;
+    width: 100%;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#registerAccountBox.active {
+    position: relative;
+    top: 0;
+    left: 0;
+
+    height: 65%;
+    width: 100%;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
 }
