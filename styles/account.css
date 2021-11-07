@@ -233,7 +233,7 @@ section {
     align-items: center;
 }
 
-#changePassword {
+.accountInformation>button {
     height: 10%;
     width: 100%;
     text-align: center;

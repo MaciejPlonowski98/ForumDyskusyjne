@@ -170,6 +170,7 @@ main {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
 }
 
 /* --------------------------------------------------------------------*/
@@ -193,26 +194,9 @@ header {
 
 }
 
-#loginSection {
-    width: 100%;
-    height: 65%;
-    /* background-color: rgba(237, 224, 212, 0.8); */
-    position: relative;
-    z-index: 1;
-    transition: 1s;
-    top: 15%;
-    left: 0;
-
-
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
-}
-
 #loginSection>input {
     width: 50%;
-    height: 10%;
+    height: 7%;
     margin-bottom: 5%;
     text-align: center;
     font-size: 2vh;
@@ -230,7 +214,7 @@ header {
 
 #loginSection>button {
     width: 50%;
-    height: 10%;
+    height: 7%;
     margin-top: 10%;
     background-color: #B08968;
     border: 0;
@@ -244,7 +228,7 @@ header {
     content: "";
     position: absolute;
     left: 10%;
-    bottom: 0;
+    bottom: 20%;
     width: 80%;
     border-bottom: 2px solid white;
 }
@@ -271,41 +255,144 @@ footer>a {
 }
 
 /*-------- KLIKNIECIE NA REJESTRUJ SIĘ POWODUJE ------ */
-#loginSection.active {
-    position: relative;
-    height: 0;
-    left: 0;
+
+#registerAccountBox {
+    position: absolute;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+
+    transition: 1s;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+
+
+}
+
+#registerAccountBox>input,
+select {
+    width: 80%;
+    height: 6%;
+    text-align: center;
+    font-size: 100%;
+
+    margin-top: 2%;
+    margin-bottom: 1%;
+
+    font-weight: 300;
+    font-size: 150%;
+    border: none;
+    border-left: 4px solid #B08968;
+    outline: none;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+}
+
+#registerAccountBox>button {
+    width: 80%;
+    height: 6%;
+    background-color: #B08968;
+    border: 0;
+    font-size: 120%;
+    margin-top: 5%;
+}
+
+#registerAccountBox>label>h2 {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#cars * {
+    color: black;
+}
+
+
+#registerAccountBox.down {
+    top: 0%;
+}
+
+#loginSection {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    transition: 1s;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#loginSection.down {
+    top: 100%;
+}
+
+#loginSection.up {
     top: -100%;
 }
 
-#registerAccountBox {
+#forgotPasswordBox {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    height: 100%;
+    color: white;
+    text-align: center;
+
+
     transition: 1s;
 
-    position: relative;
-    top: 100%;
-    left: 0;
-
-    height: 65%;
-    width: 100%;
-
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-
 }
 
-#registerAccountBox.active {
-    position: relative;
+#forgotPasswordBox>input {
+    width: 80%;
+    height: 6%;
+    margin-top: 5%;
+
+    font-weight: 300;
+    font-size: 150%;
+    border: none;
+    border-left: 4px solid #B08968;
+    outline: none;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+}
+
+#forgotPasswordBox>input:last-of-type {
+    width: 50%;
+    height: 6%;
+    margin-top: 5%;
+
+    font-weight: 300;
+    font-size: 150%;
+    border: none;
+    background-color: #B08968;
+    outline: none;
+    text-align: center;
+    color: white;
+}
+
+#forgotPasswordBox.up {
     top: 0;
-    left: 0;
+}
 
-    height: 65%;
-    width: 100%;
+.registerAccount.disappear {
+    display: none;
+}
 
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
-
+.forgotPassword.disappear {
+    display: none;
 }
