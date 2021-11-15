@@ -29,7 +29,7 @@
         <div id="thirdNavElement">
             <a href="../index.html">Wątki rozmów</i></a>
             <a href="../pages/gallery.html">Galeria</i></a>
-            <a href="../pages/account.html">Twoje konto</i></a>
+            <a href="../pages/account.html" id="navLogin">Twoje konto</i></a>
         </div>
 
     </nav>
@@ -41,16 +41,18 @@
             <div class="accountInformation">
                 <h1>Podstawowe informacje</h1>
                 <h3>Typ konta</h3>
-                <div id="accountType">Administrator</div>
+                <div id="accountType"></div>
                 <h3>Nazwa użytkownika</h3>
-                <div id="accountName">MaciejPlonowski98</div>
+                <div id="accountName"></div>
                 <h3>E-mail</h3>
-                <div id="accountEmail">MaciejPlonowski98@gmail.com</div>
+                <div id="accountEmail"></div>
                 <h3>Oceny Profilu</h3>
-                <div id="accountRates">+10</div>
+                <div id="accountRates"></div>
                 <button id="changePassword"> Zmień hasło</button>
-                <button>Wyloguj się</button>
+                <button id="logOut">Wyloguj się</button>
+
             </div>
+
             <div class="profile">
                 <h1>Profil</h1>
                 <h3>Posiadane pojazdy</h3>
@@ -77,7 +79,59 @@
             </div>
         </section>
     </main>
-    <script src="../scripts/removeSavedThread.js"></script>
+    <div class="changePasswordPopup">
+        <i class="fas fa-times-circle closeChangePassword"></i>
+        <h2>Zmień hasło</h2>
+        <input type="password" id="oldPassword" placeholder="Stare hasło">
+        <input type="password" id="newPassword1" placeholder="Nowe hasło">
+        <input type="password" id="newPassword2" placeholder="Powtórz nowe haslo">
+        <button onclick="changePassword()">Zmień hasło!</button>
+        <div class="newPasswordErrorBox"></div>
+    </div>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-analytics.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src="../scripts/connectToFirebase.js"></script>
+    <script src="../scripts/LogOut&ChangePassword.js"></script>
+    <script>
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                user_id = user.uid;
+
+                const dbRef = firebase.database().ref();
+                dbRef.child("users").child(user_id).child("userInfo").get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
+                        document.getElementById("accountType").innerHTML = snapshot.val()
+                            .accountType;
+                        document.getElementById("accountName").innerHTML = snapshot.val()
+                            .accountName;
+                        document.getElementById("accountEmail").innerHTML = snapshot.val()
+                            .accountEmail;
+                        document.getElementById("accountRates").innerHTML = snapshot.val()
+                            .accountRates;
+                        /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                document.getElementById("navLogin").href = "login.html"
+            }
+        });
+    </script>
+
+
 </body>
 
 </html>

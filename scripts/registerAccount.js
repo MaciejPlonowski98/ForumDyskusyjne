@@ -1,15 +1,15 @@
 /* OBSŁUGA FORMULARZA LOGOWANIA LUB REJESTRACJI */
 
-let registerAccountBox = document.getElementById("registerAccountBox");
-let loginSection = document.getElementById("loginSection");
+let registerForm = document.getElementById("registerForm");
+let loginForm = document.getElementById("loginForm");
 let forgotPasswordBox = document.getElementById("forgotPasswordBox");
 
 let registerAccountLink = document.querySelector(".registerAccount");
 let forgotPasswordLink = document.querySelector(".forgotPassword")
 
 registerAccountLink.addEventListener("click", function () {
-    registerAccountBox.classList.toggle("down");
-    loginSection.classList.toggle("down");
+    registerForm.classList.toggle("down");
+    loginForm.classList.toggle("down");
     forgotPasswordLink.classList.toggle("disappear");
 
     var getHeader = document.querySelector("header");
@@ -26,7 +26,7 @@ registerAccountLink.addEventListener("click", function () {
 
 forgotPasswordLink.addEventListener("click", function () {
     forgotPasswordBox.classList.toggle("up");
-    loginSection.classList.toggle("up");
+    loginForm.classList.toggle("up");
     registerAccountLink.classList.toggle("disappear");
 
     var getHeader = document.querySelector("header");

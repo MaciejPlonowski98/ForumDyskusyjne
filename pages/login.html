@@ -29,41 +29,56 @@
         <div id="thirdNavElement">
             <a href="../index.html">Wątki rozmów</i></a>
             <a href="../pages/gallery.html">Galeria</i></a>
-            <a href="../pages/account.html">Twoje konto</i></a>
+            <a href="../pages/login.html" id="navLogin">Twoje konto</i></a>
         </div>
 
     </nav>
+    <div id="emailConfirmation">
+        <a>Na podany e-mail został wysłany link aktywacyjny do konta. Aby móc korzystać z konta potwierdź swój adres
+            e-mail.</a>
+        <i class="fas fa-times-circle ClosePopUp"></i>
+    </div>
     <main>
         <header>Zaloguj się</header>
-        <div id="registerAccountBox">
-            <input type="text" name="" id="" placeholder="Nazwa użytkownika">
-            <input type="text" name="" id="" placeholder="E-mail">
-            <input type="text" name="" id="" placeholder="Hasło">
-            <input type="text" name="" id="" placeholder="Powtórz hasło">
+        <div id="registerForm">
+            <input type="text" name="accountName" id="accountName" placeholder="Nazwa użytkownika">
+            <input type="text" name="accountEmail" id="accountEmail" placeholder="E-mail">
+            <input type="password" name="accountPassword_1" id="accountPassword_1" placeholder="Hasło">
+            <input type="password" name="accountPassword_2" id="accountPassword_2" placeholder="Powtórz hasło">
             <label for="cars">
                 <h2>Jakie auto posiadasz?</h2>
             </label>
             <select id="cars" name="cars">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="fiat">Fiat</option>
-                <option value="audi">Audi</option>
+                <option value="Volkswagen">Volkswagen</option>
+                <option value="Audi">Audi</option>
+                <option value="Opel">Opel</option>
+                <option value="Ford">Ford</option>
+                <option value="Toyota">Toyota</option>
+                <option value="BMW">BMW</option>
+                <option value="Skoda">Skoda</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="KIA">KIA</option>
+                <option value="Renault">Renault</option>
             </select>
-            <input type="text" name="" id="" placeholder="Model">
-            <button>Załóż konto</button>
+            <input type="text" name="cars_model" id="cars_model" placeholder="Model">
+            <button id="SignUpButton" onclick="handleSignUp()">Załóż konto!</button>
 
         </div>
-        <div id="loginSection">
-            <input type="email" name="login" id="login" placeholder="e-mail">
-            <input type="password" name="password" id="password" placeholder="password">
-            <button id="submit">Zaloguj się!</button>
+        <div class=" errorBox"></div>
+        <div id="loginForm">
+            <input type="email" name="login" id="login" placeholder="E-mail">
+            <input type="password" name="password" id="password" placeholder="Password">
+            <button id="submit" onclick="handleLogin()">Zaloguj się!</button>
+            <div class="LoginErrorBox"></div>
         </div>
 
         <div id="forgotPasswordBox">
-            <a>Podaj swój adres e-mail w polu poniżej. Jeżeli konto istnieje zostanie na ten adres wysłana wiadomość z
+            <a>Podaj swój adres e-mail w polu poniżej. Jeżeli konto istnieje zostanie na ten adres wysłana wiadomość
+                z
                 linkiem, dzięki któremu będziesz mógł ustalić nowe hasło.</a>
-            <input type="email" placeholder="E-mail" name="" id="">
-            <input type="submit" value="Wyślij!">
+            <input type="text" placeholder="E-mail" name="forgotPasswordEmail" id="forgotPasswordEmail">
+            <button onclick="sendNewPassword()">Wyślij!</button>
+            <div class="forgotPasswordErrorBox"></div>
         </div>
         <footer>
             <a class="registerAccount">Nie masz konta? Zarejestruj się!</a>
@@ -72,6 +87,34 @@
     </main>
 
     <script src="../scripts/registerAccount.js"></script>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-analytics.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+
+
+
+    <script src="../scripts/connectToFirebase.js"></script>
+
+    <script src="../scripts/handleSignUp.js"></script>
+    <script src="../scripts/handleLogIn.js"></script>
+    <script src="../scripts/forgetPassword.js"></script>
+    <script>
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log(user)
+            if (user && user.emailVerified) {
+                document.getElementById("navLogin").href = "account.html"
+            } else {
+                document.getElementById("navLogin").href = "login.html"
+            }
+        });
+    </script>
 </body>
 
 </html>
