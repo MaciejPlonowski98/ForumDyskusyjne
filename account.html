@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Dyskusyjne</title>
+    <link rel="stylesheet" href="../styles/account.css">
+    <script src="https://kit.fontawesome.com/5820e99692.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" cdrossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/lib/lightbox2-2.11.3/dist/css/lightbox.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <nav>
+        <div id="firstNavElement">
+            <div id="siteLogo" onclick="location.href='../index.html'">
+                <div id="firstLogoElement">Forum</div>
+                <div id="secondLogoElement">Dyskusyjne</div>
+            </div>
+        </div>
+        <div id="secondNavElement">
+            <input type="text" class="empty" id="searchBox" placeholder="&#xF002; Szukaj" />
+        </div>
+        <div id="thirdNavElement">
+            <a href="../index.html">Wątki rozmów</i></a>
+            <a href="../pages/gallery.html">Galeria</i></a>
+            <a href="../pages/account.html" id="navLogin">Twoje konto</i></a>
+        </div>
+
+    </nav>
+    <main>
+        <header>
+            <div class="textBox">Twoje Konto</div>
+        </header>
+        <section>
+            <div class="accountInformation">
+                <h1>Podstawowe informacje</h1>
+                <h3>Typ konta</h3>
+                <div id="accountType"></div>
+                <h3>Nazwa użytkownika</h3>
+                <div id="accountName"></div>
+                <h3>E-mail</h3>
+                <div id="accountEmail"></div>
+                <h3>Oceny Profilu</h3>
+                <div id="accountRates"></div>
+                <button id="changePassword"> Zmień hasło</button>
+                <button id="logOut">Wyloguj się</button>
+
+            </div>
+
+            <div class="profile">
+                <h1>Profil</h1>
+                <h3>Posiadane pojazdy</h3>
+                <div id="ownedVehicles">
+                    <!-- <div class="ownedCar">
+                        <h3>Marka</h3>
+                        <h3>Model</h3>
+                        <div class="deleteOwnedCar">Usuń pojazd</div>
+                    </div> -->
+
+                </div>
+                <button id="addNewVehicle">Dodaj kolejny pojazd</button>
+            </div>
+            <div class="savedThreads">
+                <h1>Zapisane wątki</h1>
+                <div class="savedElement">
+                    <div class="savedElementInfo" onclick="location.href='newurl.html';">
+                        <a>Wątek dyskusyjny nr 1</a>
+                        <h5>Autor: <a>Maciej Płonowski</a></h5>
+                    </div>
+                    <div class="deleteSavedElement">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+    <div class="changePasswordPopup">
+        <i class="fas fa-times-circle closeChangePassword"></i>
+        <h2>Zmień hasło</h2>
+        <input type="password" id="oldPassword" placeholder="Stare hasło">
+        <input type="password" id="newPassword1" placeholder="Nowe hasło">
+        <input type="password" id="newPassword2" placeholder="Powtórz nowe haslo">
+        <button onclick="changePassword()">Zmień hasło!</button>
+        <div class="newPasswordErrorBox"></div>
+    </div>
+    <div class="addVehiclePopup">
+        <i class="fas fa-times-circle closeAddNewVehiclePopup"></i>
+        <label for="cars">
+            <h2>Jakie auto posiadasz?</h2>
+        </label>
+        <select id="cars" name="cars">
+            <option value="Volkswagen">Volkswagen</option>
+            <option value="Audi">Audi</option>
+            <option value="Opel">Opel</option>
+            <option value="Ford">Ford</option>
+            <option value="Toyota">Toyota</option>
+            <option value="BMW">BMW</option>
+            <option value="Skoda">Skoda</option>
+            <option value="Hyundai">Hyundai</option>
+            <option value="KIA">KIA</option>
+            <option value="Renault">Renault</option>
+        </select>
+        <input type="text" name="newVehicleModel" id="newVehicleModel" placeholder="Model">
+        <button onclick="addNewVehicleToDatabase()">Dodaj nowy pojazd!</button>
+    </div>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-analytics.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src="../scripts/connectToFirebase.js"></script>
+    <script src="../scripts/LogOut&ChangePassword.js"></script>
+    <script src="../scripts/Timestamp.js"></script>
+    <script>
+        /* WYŚWIETLANIE DANYCH UŻYTKOWNIKA */
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                user_id = user.uid;
+
+                const dbRef = firebase.database().ref();
+                dbRef.child("users").child(user_id).child("userInfo").get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
+                        document.getElementById("accountType").innerHTML = snapshot.val()
+                            .accountType;
+                        document.getElementById("accountName").innerHTML = snapshot.val()
+                            .accountName;
+                        document.getElementById("accountEmail").innerHTML = snapshot.val()
+                            .accountEmail;
+                        document.getElementById("accountRates").innerHTML = snapshot.val()
+                            .accountRates;
+                        /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                document.getElementById("navLogin").href = "login.html"
+            }
+        });
+    </script>
+    <script>
+        /* FORMULARZ DODAWANIA NOWEGO POJAZDU */
+        document.getElementById("addNewVehicle").addEventListener("click", function () {
+            document.querySelector("main").classList.add("avoid-clicks");
+            document.querySelector(".addVehiclePopup").setAttribute("style", "display:flex");
+            document.querySelector(".closeAddNewVehiclePopup").addEventListener("click", function () {
+                document.querySelector("main").classList.remove("avoid-clicks");
+                document.querySelector(".addVehiclePopup").setAttribute("style", "display:none");
+            })
+        })
+
+
+        /*DODAWANIE POJAZDU DO BAZY DANYCH*/
+
+        function addNewVehicleToDatabase() {
+            newCarMark = document.getElementById("cars").value;
+            newVehicleModel = document.getElementById("newVehicleModel").value;
+            getTimestamp = Timestamp();
+
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user && user.emailVerified) {
+                    user_id = user.uid;
+                    firebase
+                        .database()
+                        .ref("/users/" + user_id + "/cars/" + getTimestamp)
+                        .set({
+                            CarId: getTimestamp,
+                            Mark: newCarMark,
+                            Model: newVehicleModel
+                        }).then(() => {
+                            location.assign("account.html")
+                        })
+                } else {
+                    console.log("error")
+                    document.getElementById("navLogin").href = "login.html"
+                }
+            });
+
+        }
+
+        /*ODKOMENTOWAĆ JAK BĘDZIE POPRAWNIE ID SIĘ PRZYPISYWAĆ DO AUTA */
+
+        function deleteOwnedCar(element, id) {
+            // element i jego ID
+            element.addEventListener("click", (e) => {
+                var todo_id = e.target.parentNode.id;
+                console.log(todo_id);
+                firebase
+                    .database()
+                    .ref("/users/" + user_id + "/cars/" + todo_id)
+                    .remove()
+                    .then(() => {
+                        e.target.parentNode.remove();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            });
+        }
+
+
+        /* WYŚWIETLANIE POJAZDÓW Z BAZY */
+        var ownedVehicles = document.getElementById("ownedVehicles");
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                user_id = user.uid;
+
+                const dbRef = firebase.database().ref();
+                dbRef.child("users").child(user_id).child("cars").get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        data = Object.values(snapshot.val());
+                        dataKeys = Object.keys(snapshot.val());
+                        counter = 0;
+
+                        data.forEach((ex) => {
+                            var carSingleBox = document.createElement("div");
+                            carSingleBox.classList.add("ownedCar");
+                            var createH2 = document.createElement("h2");
+                            var createH3 = document.createElement("h3");
+                            var createDeleteDiv = document.createElement("div");
+                            var createTextForDeleteDiv = document.createTextNode("Usuń pojazd");
+                            createDeleteDiv.setAttribute("class", "deleteOwnedCar");
+
+                            carSingleBox.appendChild(createH2);
+                            createH2.appendChild(document.createTextNode(ex.Mark));
+
+                            carSingleBox.appendChild(createH3);
+                            createH3.appendChild(document.createTextNode(ex.Model));
+
+                            carSingleBox.appendChild(createDeleteDiv);
+                            createDeleteDiv.appendChild(createTextForDeleteDiv);
+                            createDeleteDiv.setAttribute("id", ex.CarId);
+
+                            carSingleBox.setAttribute("id", ex.CarId)
+
+                            console.log()
+
+                            ownedVehicles.appendChild(carSingleBox)
+                            deleteOwnedCar(createDeleteDiv, ex.CarId);
+
+                        });
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                document.getElementById("navLogin").href = "login.html"
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
