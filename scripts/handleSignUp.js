@@ -34,11 +34,10 @@ function handleSignUp() {
             .then((result) => {
                 firebase
                     .database()
-                    .ref("/users/" + result.user.uid + "/cars")
+                    .ref("/users/" + result.user.uid + "/cars/" + Timestamp())
                     .set({
-                        defaultCarMark: getCarMark,
-                        defaultCarModel: getCarModel,
-
+                        Mark: getCarMark,
+                        Model: getCarModel,
                     })
                 firebase
                     .database()
