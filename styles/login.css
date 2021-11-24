@@ -194,25 +194,31 @@ header {
 
 }
 
-#loginSection>input {
-    width: 50%;
+#loginForm>input {
+    width: 60%;
     height: 7%;
+
     margin-bottom: 5%;
     text-align: center;
     font-size: 2vh;
+
+    font-weight: 300;
+    font-size: 150%;
+    border: none;
+    border-left: 4px solid #B08968;
+    outline: none;
+    text-align: center;
+    background-color: transparent;
     color: white;
-    font-weight: 600;
-    background-color: #B08968;
-    border: 0;
 }
 
-#loginSection>input::placeholder {
+#loginForm>input::placeholder {
     font-weight: 400;
-    color: black;
+    color: white;
 }
 
 
-#loginSection>button {
+#loginForm>button {
     width: 50%;
     height: 7%;
     margin-top: 10%;
@@ -224,7 +230,7 @@ header {
 
 
 /* PASEK MIĘDZY LOGIN SECTION A REGISTER SECTION */
-#loginSection::before {
+#loginForm::before {
     content: "";
     position: absolute;
     left: 10%;
@@ -256,7 +262,7 @@ footer>a {
 
 /*-------- KLIKNIECIE NA REJESTRUJ SIĘ POWODUJE ------ */
 
-#registerAccountBox {
+#registerForm {
     position: absolute;
     top: -100%;
     width: 100%;
@@ -274,7 +280,7 @@ footer>a {
 
 }
 
-#registerAccountBox>input,
+#registerForm>input,
 select {
     width: 80%;
     height: 6%;
@@ -294,16 +300,16 @@ select {
     color: white;
 }
 
-#registerAccountBox>button {
+
+#SignUpButton {
     width: 80%;
     height: 6%;
     background-color: #B08968;
     border: 0;
     font-size: 120%;
-    margin-top: 5%;
 }
 
-#registerAccountBox>label>h2 {
+#registerForm>label>h2 {
     margin-top: 10%;
     margin-bottom: 10%;
 }
@@ -313,11 +319,11 @@ select {
 }
 
 
-#registerAccountBox.down {
+#registerForm.down {
     top: 0%;
 }
 
-#loginSection {
+#loginForm {
     position: absolute;
     top: 0;
     width: 100%;
@@ -331,11 +337,11 @@ select {
     align-items: center;
 }
 
-#loginSection.down {
+#loginForm.down {
     top: 100%;
 }
 
-#loginSection.up {
+#loginForm.up {
     top: -100%;
 }
 
@@ -371,7 +377,7 @@ select {
     color: white;
 }
 
-#forgotPasswordBox>input:last-of-type {
+#forgotPasswordBox>button {
     width: 50%;
     height: 6%;
     margin-top: 5%;
@@ -394,5 +400,70 @@ select {
 }
 
 .forgotPassword.disappear {
+    display: none;
+}
+
+.errorBox {
+    position: absolute;
+    width: 100%;
+    font-size: 150%;
+    height: auto;
+    color: red;
+    text-align: center;
+    padding: 1vh;
+    bottom: 1%;
+
+}
+
+.LoginErrorBox {
+    width: 100%;
+    font-size: 150%;
+    height: auto;
+    color: red;
+    text-align: center;
+    padding: 1vh;
+    bottom: 1%;
+}
+
+.forgotPasswordErrorBox {
+    width: 100%;
+    font-size: 150%;
+    height: auto;
+    color: red;
+    text-align: center;
+    padding: 1vh;
+    bottom: 1%;
+}
+
+#emailConfirmation {
+    width: 50%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    color: white;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+
+    display: none;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#emailConfirmation>.fa-times-circle {
+    font-size: 5vh;
+    top: 0;
+    right: 0;
+    position: absolute;
+}
+
+#emailConfirmation.appear {
+    display: flex;
+}
+
+#chujwie{
     display: none;
 }

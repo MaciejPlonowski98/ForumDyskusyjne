@@ -239,6 +239,7 @@ section {
     text-align: center;
     font-size: 2vh;
     background-color: #B08968;
+    border: 0;
 
     display: flex;
     flex-flow: column;
@@ -248,16 +249,7 @@ section {
 
 /* ------------------------------------------------------------ */
 
-.profile {
-    width: 30%;
-    height: 90%;
-    background-color: #E6CCB2;
 
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .profile>h1 {
     height: 10%;
@@ -276,6 +268,7 @@ section {
     width: 100%;
     text-align: center;
     font-size: 2vh;
+    border: 0;
     background-color: #B08968;
 
     display: flex;
@@ -284,18 +277,6 @@ section {
     align-items: center;
 }
 
-#ownedVehicles {
-    width: 100%;
-    height: 80%;
-    background-color: #E6CCB2;
-    text-align: center;
-    overflow: auto;
-
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-    align-items: center;
-}
 
 .ownedCar {
     width: 100%;
@@ -306,6 +287,11 @@ section {
     justify-content: space-around;
     align-items: center;
 }
+
+.deleteOwnedCar {
+    cursor: pointer;
+}
+
 
 
 /* ------------------------------------------------------------ */
@@ -358,4 +344,146 @@ section {
     flex-flow: column;
     justify-content: center;
     align-items: center;
+}
+
+.changePasswordPopup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 50%;
+    background-color: #03071E;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 2;
+    color: white;
+
+    display: none;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+.changePasswordPopup>input {
+    width: 40%;
+    height: 10%;
+    font-weight: 300;
+    font-size: 150%;
+    border: none;
+    border-left: 4px solid #B08968;
+    outline: none;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+}
+
+.changePasswordPopup>button {
+    width: 40%;
+    height: 10%;
+    border: 0;
+    text-align: center;
+    font-size: 2vh;
+    background-color: #B08968;
+}
+
+
+.changePasswordPopup>.fa-times-circle {
+    font-size: 300%;
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    transform: translate(50%, -50%);
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+}
+
+main.avoid-clicks {
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+.profile {
+    width: 30%;
+    height: 90%;
+    background-color: #E6CCB2;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ownedVehicles {
+    width: 100%;
+    height: 80%;
+    background-color: #E6CCB2;
+    text-align: center;
+    overflow: auto;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.addVehiclePopup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25%;
+    height: 50%;
+    background-color: #03071E;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 2;
+    color: white;
+
+    display: none;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.addVehiclePopup>.closeAddNewVehiclePopup {
+    font-size: 300%;
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    transform: translate(50%, -50%);
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.addVehiclePopup>input,
+select {
+    width: 40%;
+    height: 10%;
+    font-weight: 300;
+    font-size: 150%;
+    border: none;
+    border-left: 4px solid #B08968;
+    outline: none;
+    text-align: center;
+    background-color: #03071E;
+    color: white;
+}
+
+.addVehiclePopup>input,
+select:placeholder {
+    color: white;
+}
+
+.addVehiclePopup>button {
+    width: 40%;
+    height: 10%;
+    border: 0;
+    text-align: center;
+    font-size: 2vh;
+    background-color: #B08968;
 }
