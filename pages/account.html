@@ -77,7 +77,6 @@
                         <i class="fas fa-times"></i>
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
@@ -121,155 +120,12 @@
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
     <script src="../scripts/connectToFirebase.js"></script>
-    <script src="../scripts/LogOut&ChangePassword.js"></script>
+    <script src="../scripts/handleProfileBasicInfo.js"></script>
     <script src="../scripts/Timestamp.js"></script>
-    <script>
-        /* WYŚWIETLANIE DANYCH UŻYTKOWNIKA */
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
-                user_id = user.uid;
-
-                const dbRef = firebase.database().ref();
-                dbRef.child("users").child(user_id).child("userInfo").get().then((
-                    snapshot) => {
-                    if (snapshot.exists()) {
-                        /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
-                        document.getElementById("accountType").innerHTML = snapshot.val()
-                            .accountType;
-                        document.getElementById("accountName").innerHTML = snapshot.val()
-                            .accountName;
-                        document.getElementById("accountEmail").innerHTML = snapshot.val()
-                            .accountEmail;
-                        document.getElementById("accountRates").innerHTML = snapshot.val()
-                            .accountRates;
-                        /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
-                    } else {
-                        console.log("No data available");
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-            } else {
-                document.getElementById("navLogin").href = "login.html"
-            }
-        });
-    </script>
-    <script>
-        /* FORMULARZ DODAWANIA NOWEGO POJAZDU */
-        document.getElementById("addNewVehicle").addEventListener("click", function () {
-            document.querySelector("main").classList.add("avoid-clicks");
-            document.querySelector(".addVehiclePopup").setAttribute("style", "display:flex");
-            document.querySelector(".closeAddNewVehiclePopup").addEventListener("click", function () {
-                document.querySelector("main").classList.remove("avoid-clicks");
-                document.querySelector(".addVehiclePopup").setAttribute("style", "display:none");
-            })
-        })
-
-
-        /*DODAWANIE POJAZDU DO BAZY DANYCH*/
-
-        function addNewVehicleToDatabase() {
-            newCarMark = document.getElementById("cars").value;
-            newVehicleModel = document.getElementById("newVehicleModel").value;
-            getTimestamp = Timestamp();
-
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user && user.emailVerified) {
-                    user_id = user.uid;
-                    firebase
-                        .database()
-                        .ref("/users/" + user_id + "/cars/" + getTimestamp)
-                        .set({
-                            CarId: getTimestamp,
-                            Mark: newCarMark,
-                            Model: newVehicleModel
-                        }).then(() => {
-                            location.assign("account.html")
-                        })
-                } else {
-                    console.log("error")
-                    document.getElementById("navLogin").href = "login.html"
-                }
-            });
-
-        }
-
-        /*ODKOMENTOWAĆ JAK BĘDZIE POPRAWNIE ID SIĘ PRZYPISYWAĆ DO AUTA */
-
-        function deleteOwnedCar(element, id) {
-            // element i jego ID
-            element.addEventListener("click", (e) => {
-                var todo_id = e.target.parentNode.id;
-                console.log(todo_id);
-                firebase
-                    .database()
-                    .ref("/users/" + user_id + "/cars/" + todo_id)
-                    .remove()
-                    .then(() => {
-                        e.target.parentNode.remove();
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            });
-        }
-
-
-        /* WYŚWIETLANIE POJAZDÓW Z BAZY */
-        var ownedVehicles = document.getElementById("ownedVehicles");
-
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
-                user_id = user.uid;
-
-                const dbRef = firebase.database().ref();
-                dbRef.child("users").child(user_id).child("cars").get().then((
-                    snapshot) => {
-                    if (snapshot.exists()) {
-                        data = Object.values(snapshot.val());
-                        dataKeys = Object.keys(snapshot.val());
-                        counter = 0;
-
-                        data.forEach((ex) => {
-                            var carSingleBox = document.createElement("div");
-                            carSingleBox.classList.add("ownedCar");
-                            var createH2 = document.createElement("h2");
-                            var createH3 = document.createElement("h3");
-                            var createDeleteDiv = document.createElement("div");
-                            var createTextForDeleteDiv = document.createTextNode("Usuń pojazd");
-                            createDeleteDiv.setAttribute("class", "deleteOwnedCar");
-
-                            carSingleBox.appendChild(createH2);
-                            createH2.appendChild(document.createTextNode(ex.Mark));
-
-                            carSingleBox.appendChild(createH3);
-                            createH3.appendChild(document.createTextNode(ex.Model));
-
-                            carSingleBox.appendChild(createDeleteDiv);
-                            createDeleteDiv.appendChild(createTextForDeleteDiv);
-                            createDeleteDiv.setAttribute("id", ex.CarId);
-
-                            carSingleBox.setAttribute("id", ex.CarId)
-
-                            console.log()
-
-                            ownedVehicles.appendChild(carSingleBox)
-                            deleteOwnedCar(createDeleteDiv, ex.CarId);
-
-                        });
-                    } else {
-                        console.log("No data available");
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-            } else {
-                document.getElementById("navLogin").href = "login.html"
-            }
-        });
-    </script>
-
-
+    <script src="../scripts/handleProfileCarInfo.js"></script>
 </body>
+<script>
+
+</script>
 
 </html>
