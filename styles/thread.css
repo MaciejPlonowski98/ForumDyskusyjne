@@ -1,0 +1,364 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+
+}
+
+
+body {
+    background: url("../images/backgroundImage.jpg") center center;
+    background-position: center;
+    background-size: auto;
+    background-attachment: fixed;
+}
+
+
+/*Cała nawigacja*/
+nav {
+    width: 100%;
+    height: 10%;
+    position: fixed;
+    background-color: #03071E;
+    z-index: 2;
+
+    /* FlexBox Container */
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Pierwszy segment nawigacji z logiem */
+#firstNavElement {
+    height: 100%;
+    width: 33.33%;
+
+    /* FlexBox Container */
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#siteLogo {
+
+    text-transform: uppercase;
+    width: 30%;
+    height: 100%;
+    color: white;
+    overflow: hidden;
+    cursor: pointer;
+
+    /* FlexBox Container */
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#firstLogoElement {
+    font-size: 2.9vw;
+    line-height: 100%;
+    border-bottom: 1px solid white;
+}
+
+#secondLogoElement {
+    font-size: 1.69vw;
+    line-height: 100%;
+}
+
+/* Drugi segment nawigacji - Wyszukiwanie */
+
+#secondNavElement {
+    height: 100%;
+    width: 33.33%;
+}
+
+/*Search Field*/
+#searchBox {
+    height: 50%;
+    width: 50%;
+    border-radius: 10px;
+    border: 0;
+    background-color: white;
+    position: relative;
+    top: 25%;
+    left: 25%;
+
+}
+
+/*Serach Field Placeholder*/
+#searchBox.empty {
+    font-size: 2vh;
+    text-align: center;
+    line-height: 100%;
+}
+
+
+/*Trzeci segment nawigacji - podstrony */
+#thirdNavElement {
+    height: 100%;
+    width: 33.33%;
+    color: white;
+    text-transform: uppercase;
+    font-size: 1vw;
+
+    /*Flexbox container dla 3 elementów podstron*/
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/*Podkreślenie podstrony w nawigacji w której się znajdujemy*/
+#thirdNavElement>a:nth-child(1) {
+    font-weight: 900;
+    border-bottom: 2px solid #B08968;
+}
+
+#thirdNavElement>a:nth-child(2)::before,
+#thirdNavElement>a:nth-child(3)::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background-color: #B08968;
+    transition: .5s;
+}
+
+#thirdNavElement>a:nth-child(2):hover::before,
+#thirdNavElement>a:nth-child(3):hover::before {
+    left: 0;
+}
+
+/* Odnośniki do podstron */
+
+#thirdNavElement>a {
+    position: relative;
+    border-style: none;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+#thirdNavElement>a:visited {
+    text-decoration: none;
+    color: white;
+    text-transform: none;
+}
+
+/* --------------------------------------------- */
+section {
+    width: 70vw;
+    height: 80vh;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+
+}
+
+
+/*Nagłówek posta*/
+header {
+    width: 100%;
+    height: 15%;
+    background-color: #E6CCB2;
+
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-topleft: 20px;
+    -moz-border-radius-topright: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+    display: flex;
+    flex-flow: wrap column;
+    align-items: center;
+    justify-content: center;
+}
+
+header>h1 {
+    align-self: center;
+    clear: both;
+    transform: translateY(50%);
+}
+
+header>.threadDate {
+    align-self: flex-end;
+    transform: translateY(-50%);
+    margin-right: 2%;
+}
+
+/*Kontener na wszystkie komenatarze w poście */
+
+main {
+    height: auto;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+/* Pojedyńczy komentarz w poście */
+
+
+article {
+    width: 100%;
+    height: auto;
+    min-height: 15%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+
+    background-color: #EDE0D4;
+
+
+    /*FlexBox Container*/
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: center;
+}
+
+.newPostOptions {
+    background-color: #B08968;
+    width: 5%;
+
+    /*FlexBox Container*/
+    display: flex;
+    flex-flow: nowrap column;
+    justify-content: center;
+    align-items: center;
+
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-topleft: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.newPostContent {
+    width: 60%;
+    text-align: justify;
+    padding: 2%;
+    overflow-wrap:break-word;
+
+}
+
+.newPostInfo {
+    width: 20%;
+
+    /*FlexBox Container*/
+    display: flex;
+    flex-flow: nowrap column;
+    justify-content: center;
+    align-items: center;
+}
+
+.newPostInfo>h4 {
+    padding: 5%;
+}
+
+.newPostInfo>h4:first-of-type {
+    border-bottom: 1px solid black;
+
+}
+
+.newPostStats {
+    width: 15%;
+
+    display: flex;
+    flex-flow: nowrap row;
+    justify-content: center;
+    align-items: center;
+}
+
+.far {
+    font-size: 200%;
+    font-weight: 200;
+    padding: 5%;
+    display: flex;
+    flex-flow: wrap column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.fa-thumbs-up>h5 {
+    color: green;
+}
+
+.fa-thumbs-down>h5 {
+    color: red;
+}
+
+/* ---------------------- */
+
+footer {
+    width: 100%;
+    height: 15%;
+
+    -webkit-border-bottom-right-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    background-color: #EDE0D4;
+
+
+    /*FlexBox Container*/
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: center;
+    align-items: center;
+}
+
+.addNewComment {
+    width: 75%;
+    height: 80%;
+
+    /*FlexBox Container*/
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.addNewComment>#newCommentInput {
+    font-size: 200%;
+    width: 85%;
+    min-height: 100%;
+    resize: vertical;
+    height: auto;
+    border: 0;
+    border-radius: 20px;
+    padding: 0;
+    text-align: left;
+}
+
+.addNewComment>button {
+    text-align: center;
+    width: 10%;
+    height: 100%;
+    border: 0;
+}
+
+
+.addNewCommentAttachment {
+    width: 20%;
+    height: 80%;
+    font-size: 150%;
+
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: center;
+    align-items: center;
+}
