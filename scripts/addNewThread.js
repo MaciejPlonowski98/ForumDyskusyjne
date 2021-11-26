@@ -2,7 +2,6 @@
 var user = firebase.auth().currentUser;
 firebase.auth().onAuthStateChanged(function (user) {
     if (user && user.emailVerified) {
-        console.log(user);
         document.getElementById('addNewThread').setAttribute("style", "display:block")
 
         document.getElementById('addNewThread').addEventListener("click", function () {
@@ -52,6 +51,8 @@ function addNewThreadInMainContainer() {
                     thread_rate: 0,
                     title: topicInput,
                     attached_file: newThreadImageUpload,
+                    thumbs_up: 0,
+                    thumbs_down: 0,
                 }).then(() => {
                     location.assign("index.html")
                 })
@@ -70,11 +71,13 @@ dbRef.child("threads").get().then((
     if (snapshot.exists()) {
         data = Object.values(snapshot.val());
         dataKeys = Object.keys(snapshot.val());
+        test = Object.entries(snapshot.val());
+        var counter = 0;
         if (user && user.emailVerified) {
             var newThreadAuthor = document.getElementById("newThreadAuthor");
             newThreadAuthor.appendChild(document.createTextNode("Autor: " + user.email))
         }
-        data.forEach((ex) => {
+        test.map(([klucz, wartosc]) => {
             /*Tworzy element div zaraz po aside i nadaje mu klase */
             var thread = document.createElement("div");
             thread.setAttribute("class", "thread")
@@ -82,7 +85,7 @@ dbRef.child("threads").get().then((
             /* Tworzy odnośnik a dla wszystkich elementów i umieszcza go w thread */
             var aMainElement = document.createElement("a");
             aMainElement.setAttribute("class", "testclick");
-            aMainElement.setAttribute("href", "onet.pl");
+            aMainElement.setAttribute("href", "/pages/thread.html?id=" + klucz);
             thread.appendChild(aMainElement);
             /* Tworzy pierwszy div threadTopic */
             var threadTopic = document.createElement("div");
@@ -90,10 +93,10 @@ dbRef.child("threads").get().then((
             var threadTopicASecond = document.createElement("a");
             threadTopic.setAttribute("class", "threadTopic");
 
-            threadTopicAFirst.appendChild(document.createTextNode(ex.title))
+            threadTopicAFirst.appendChild(document.createTextNode(wartosc.title))
             threadTopic.appendChild(threadTopicAFirst);
 
-            threadTopicASecond.appendChild(document.createTextNode(ex.creation_date))
+            threadTopicASecond.appendChild(document.createTextNode(wartosc.creation_date))
             threadTopic.appendChild(threadTopicASecond);
 
             /* Tworzy drugi div - threadEntries */
@@ -101,7 +104,7 @@ dbRef.child("threads").get().then((
             var threadEntriesA = document.createElement("a");
 
             threadEntries.setAttribute("class", "threadEntries");
-            threadEntriesA.appendChild(document.createTextNode(ex.entries))
+            threadEntriesA.appendChild(document.createTextNode(wartosc.entries))
             threadEntries.appendChild(threadEntriesA);
 
             /*Tworzy trzeci div - threadAutor */
@@ -109,12 +112,12 @@ dbRef.child("threads").get().then((
             var threadAutorA = document.createElement("a");
 
             threadAutor.setAttribute("class", "threadAuthor");
-            threadAutorA.appendChild(document.createTextNode(ex.author))
+            threadAutorA.appendChild(document.createTextNode(wartosc.author))
             threadAutor.appendChild(threadAutorA);
 
             /*Tworzy czwarty div - threadRate */
             var threadRate = document.createElement("div");
-            var checked = parseInt(ex.thread_rate)
+            var checked = parseInt(wartosc.thread_rate)
 
 
             for (var i = 0; i < checked; i++) {
@@ -135,10 +138,74 @@ dbRef.child("threads").get().then((
             thread.appendChild(threadEntries)
             thread.appendChild(threadAutor)
             thread.appendChild(threadRate)
+        })
+        // data.forEach((ex) => {
+
+        //     console.log(ex, ex2)
+
+        //     counter++;
+
+        //     /*Tworzy element div zaraz po aside i nadaje mu klase */
+        //     var thread = document.createElement("div");
+        //     thread.setAttribute("class", "thread")
+        //     getAside.after(thread);
+        //     /* Tworzy odnośnik a dla wszystkich elementów i umieszcza go w thread */
+        //     var aMainElement = document.createElement("a");
+        //     aMainElement.setAttribute("class", "testclick");
+        //     aMainElement.setAttribute("href", "/pages/thread.html?id=");
+        //     thread.appendChild(aMainElement);
+        //     /* Tworzy pierwszy div threadTopic */
+        //     var threadTopic = document.createElement("div");
+        //     var threadTopicAFirst = document.createElement("a");
+        //     var threadTopicASecond = document.createElement("a");
+        //     threadTopic.setAttribute("class", "threadTopic");
+
+        //     threadTopicAFirst.appendChild(document.createTextNode(ex.title))
+        //     threadTopic.appendChild(threadTopicAFirst);
+
+        //     threadTopicASecond.appendChild(document.createTextNode(ex.creation_date))
+        //     threadTopic.appendChild(threadTopicASecond);
+
+        //     /* Tworzy drugi div - threadEntries */
+        //     var threadEntries = document.createElement("div");
+        //     var threadEntriesA = document.createElement("a");
+
+        //     threadEntries.setAttribute("class", "threadEntries");
+        //     threadEntriesA.appendChild(document.createTextNode(ex.entries))
+        //     threadEntries.appendChild(threadEntriesA);
+
+        //     /*Tworzy trzeci div - threadAutor */
+        //     var threadAutor = document.createElement("div");
+        //     var threadAutorA = document.createElement("a");
+
+        //     threadAutor.setAttribute("class", "threadAuthor");
+        //     threadAutorA.appendChild(document.createTextNode(ex.author))
+        //     threadAutor.appendChild(threadAutorA);
+
+        //     /*Tworzy czwarty div - threadRate */
+        //     var threadRate = document.createElement("div");
+        //     var checked = parseInt(ex.thread_rate)
 
 
+        //     for (var i = 0; i < checked; i++) {
+        //         var span = document.createElement("span");
+        //         threadRate.setAttribute("class", "threadRate");
+        //         span.setAttribute("class", "fa fa-star checkedStar");
+        //         threadRate.appendChild(span);
+        //     }
+        //     for (var j = checked; j < 5; j++) {
+        //         var span = document.createElement("span");
+        //         threadRate.setAttribute("class", "threadRate");
+        //         span.setAttribute("class", "fa fa-star");
+        //         threadRate.appendChild(span);
+        //     }
 
-        });
+        //     /* DODAWANIE WSZYSTKICH DIVÓW NA KOŃCU */
+        //     thread.appendChild(threadTopic)
+        //     thread.appendChild(threadEntries)
+        //     thread.appendChild(threadAutor)
+        //     thread.appendChild(threadRate)
+        // });
     } else {
         console.log("No data available");
     }
