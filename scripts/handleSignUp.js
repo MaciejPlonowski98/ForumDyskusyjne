@@ -13,6 +13,8 @@ function handleSignUp() {
     var regularExpressionForPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
         getAccountPassword_1);
 
+    var setTimestamp = Timestamp();
+
     if (getAccountName == "" || getAccountEmail == "" || getAccountPassword_1 == "" ||
         getAccountPassword_2 == "" || getCarMark == "" || getCarModel == "") {
         getErrorBox.innerHTML = "Uzupełnij wszystkie pola!";
@@ -34,8 +36,9 @@ function handleSignUp() {
             .then((result) => {
                 firebase
                     .database()
-                    .ref("/users/" + result.user.uid + "/cars/" + Timestamp())
+                    .ref("/users/" + result.user.uid + "/cars/" + setTimestamp)
                     .set({
+                        CarId: setTimestamp,
                         Mark: getCarMark,
                         Model: getCarModel,
                     })
