@@ -214,6 +214,9 @@ article {
     min-height: 15%;
     margin-top: 2px;
     margin-bottom: 2px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+
 
     background-color: #EDE0D4;
 
@@ -246,7 +249,7 @@ article {
     width: 60%;
     text-align: justify;
     padding: 2%;
-    overflow-wrap:break-word;
+    overflow-wrap: break-word;
 
 }
 
