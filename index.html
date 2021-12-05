@@ -39,10 +39,16 @@
             <a>Temat </a>
             <input type="text" name="topicInput" id="topicInput">
         </div>
+        <div class="newThreadReferCar">
+            <a>Dotyczy pojazdu </a>
+            <select name="referCar" id="referCar" form="referCar">
+            </select>
+        </div>
         <div class="newThreadContent">
             <a>Treść</a>
             <textarea name="contentInput" id="contentInput"></textarea>
         </div>
+
         <div class="newThreadDetails">
             <input type="file" name="newThreadImageUpload" id="newThreadImageUpload" hidden>
             <label for="newThreadImageUpload">Dodaj plik
@@ -68,6 +74,7 @@
                 <div class="threadTopic">
                     <a>Wątek dyskusyjny nr 1</a>
                     <a>10.08.2021</a>
+
                 </div>
                 <div class="threadEntries">
                     <a>5</a>
@@ -119,6 +126,9 @@
                 document.getElementById("navLogin").href = "./pages/login.html"
             }
         });
+    </script>
+    <script>
+
     </script>
 </body>
 
