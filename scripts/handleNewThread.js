@@ -243,7 +243,6 @@ firebase.auth().onAuthStateChanged((user) => {
 var getBookmark = document.getElementById("saveThread");
 getBookmark.addEventListener("click", function () {
     getBookmark.setAttribute("class", "fas fa-bookmark")
-    window.alert("Zapisano wątek, możesz go usunąć z poziomu Twojego konta!");
     firebase.auth().onAuthStateChanged((user) => {
         if (user && user.emailVerified) {
             user_id = user.uid;
