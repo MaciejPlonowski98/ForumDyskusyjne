@@ -188,13 +188,29 @@ header {
 header>h1 {
     align-self: center;
     clear: both;
-    transform: translateY(50%);
+    position: absolute;
 }
 
 header>.threadDate {
     align-self: flex-end;
-    transform: translateY(-50%);
     margin-right: 2%;
+    position: absolute;
+}
+
+header>.far.fa-bookmark {
+    padding: 0;
+    align-self: flex-start;
+    position: absolute;
+    margin-left: 2%;
+    cursor: pointer;
+}
+
+header>.fas.fa-bookmark {
+    padding: 0;
+    align-self: flex-start;
+    position: absolute;
+    margin-left: 2%;
+    cursor: pointer;
 }
 
 /*Kontener na wszystkie komenatarze w poście */
@@ -292,11 +308,30 @@ article {
     text-align: center;
 }
 
-.fa-thumbs-up>h5 {
+.fas {
+    font-size: 200%;
+    font-weight: 200;
+    padding: 5%;
+    display: flex;
+    flex-flow: wrap column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.fas.fa-thumbs-up>h5 {
     color: green;
 }
 
-.fa-thumbs-down>h5 {
+.fas.fa-thumbs-down>h5 {
+    color: red;
+}
+
+.far.fa-thumbs-up>h5 {
+    color: green;
+}
+
+.far.fa-thumbs-down>h5 {
     color: red;
 }
 
@@ -317,7 +352,7 @@ footer {
 
 
     /*FlexBox Container*/
-    display: flex;
+    display: none;
     flex-flow: wrap row;
     justify-content: center;
     align-items: center;
