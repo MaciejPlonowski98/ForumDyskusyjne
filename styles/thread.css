@@ -261,6 +261,10 @@ article {
     border-bottom-left-radius: 20px;
 }
 
+.newPostOptions>i {
+    font-size: 125%;
+}
+
 .newPostContent {
     width: 60%;
     text-align: justify;
