@@ -12,10 +12,8 @@ dbRef.child("threads/" + getUrlID).get().then((
     snapshot) => {
     if (snapshot.exists()) {
         data = Object.values(snapshot.val());
-        if (user && user.emailVerified) {
-            /* TUTAJ POWINNA BYĆ OSBŁUGA WYŚWIETLANIA DODAWANIA POSTA
-            W ZALEŻNOŚCI CZY UŻYTKOWNIK JEST ZALOGOWANY */
-        }
+        var authorUid = snapshot.val().userUid;
+
         var getTitle = document.querySelector("section>header>h1");
         getTitle.appendChild(document.createTextNode(snapshot.val().title));
 
@@ -76,14 +74,66 @@ dbRef.child("threads/" + getUrlID).get().then((
         newPostStats.appendChild(createIforThumbsUp)
         newPostStats.appendChild(createIforThumbsDown)
         createArticle.appendChild(newPostStats);
-        //crossNote(createIforThumbsUp, getUrlID);
 
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                dbRef.child("users").child(user_id).child("userInfo").get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        if (snapshot.val().accountType == "Administrator") {
+                            /* USUWANIE CAŁEGO WĄTKU ROZMÓW Z POZIOMU ADMINISTRATORA */
+                            var createDeletingElement = document.createElement("i");
+                            createDeletingElement.setAttribute("class", "fas fa-folder-minus");
+                            deletePost(createDeletingElement, getUrlID);
+                            newPostOptions.appendChild(createDeletingElement);
+
+
+                            var createBlockingUserElement = document.createElement("i");
+                            createBlockingUserElement.setAttribute("class", "fas fa-user-lock");
+                            blockAccount(createBlockingUserElement, authorUid);
+                            newPostOptions.appendChild(createBlockingUserElement);
+
+                        }
+                    }
+                })
+            }
+        })
     } else {
         console.log("No data available");
     }
 })
 
+/*USUWANIE CAŁEGO POSTA Z POZIOMU ADMINISTRATORA */
+function deletePost(createDeletingElement, postID) {
+    createDeletingElement.addEventListener("click", function () {
+        var user = firebase.auth().currentUser;
+        if (confirm("Potwierdź usuwanie całego wątku.")) {
+            if (user && user.emailVerified) {
+                firebase
+                    .database()
+                    .ref("/threads/" + postID)
+                    .remove()
+                    .then(() => {
+                        location.assign("../index.html")
+                    })
+            }
+        } else {
+            window.alert("Anulowałeś usuwanie posta.")
+        }
+    });
+}
 
+/*BLOKOWANIE UŻYTKOWNIKA W POŚCIE - Z POZIOMU AMINISTRATORA */
+function blockAccount(createBlockingUserElement, account) {
+    var authRef = firebase.auth();
+    createBlockingUserElement.addEventListener("click", function () {
+        if (confirm("Potwierdź blokowanie użytkownika.")) {
+            /*TUTAJ POWINNO BYĆ BLOKOWANIE UŻYTKOWNIKA - TEGO KTÓRY UTWORZYŁ POSTA */
+        } else {
+            window.alert("Anulowałeś usuwanie posta.")
+        }
+    });
+}
 /*SPRAWDZANIE CZY UŻYTKOWNIK JEST ZALOGOWANY, JEŚLI NIE TO NIE WYŚWIETLA MOŻLIWOŚCI DODAWANIA KOMENTARZY, JEŚLI TAK TO WYŚWIETLA FORMULARZ DODAWANIWA KOMENTARZA*/
 firebase.auth().onAuthStateChanged((user) => {
     if (user && user.emailVerified) {
@@ -135,6 +185,7 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
     if (snapshot.exists()) {
         var getInfo = Object.entries(snapshot.val());
         if (user && user.emailVerified) {
+            console.log("test")
             /* TUTAJ POWINNA BYĆ OSBŁUGA WYŚWIETLANIA DODAWANIA POSTA
             W ZALEŻNOŚCI CZY UŻYTKOWNIK JEST ZALOGOWANY */
         }
@@ -182,6 +233,30 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
             createIforThumbsUp.appendChild(createH5forThumbsUp);
             createIforThumbsDown.appendChild(createH5forThumbsDown);
 
+            /* DODANIE FUNKCJI ADMINISTRATORA DO USUWANIA POJEDYŃCZYCH KOMENTARZY */
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user && user.emailVerified) {
+                    dbRef.child("users").child(user_id).child("userInfo").get().then((
+                        snapshot) => {
+                        if (snapshot.exists()) {
+                            if (snapshot.val().accountType == "Administrator") {
+                                /* USUWANIE CAŁEGO WĄTKU ROZMÓW Z POZIOMU ADMINISTRATORA */
+                                var createDeletingElement = document.createElement("i");
+                                createDeletingElement.setAttribute("class", "fas fa-trash-alt");
+                                deleteComment(createDeletingElement, klucz);
+                                newPostOptions.appendChild(createDeletingElement);
+
+                                /*Blokowanie użytkwonika który napisał komentarz */
+                                var createBlockingUserElement = document.createElement("i");
+                                createBlockingUserElement.setAttribute("class", "fas fa-user-lock");
+                                newPostOptions.appendChild(createBlockingUserElement);
+
+                            }
+                        }
+                    })
+                }
+            })
+
             newPostStats.appendChild(createIforThumbsUp)
             newPostStats.appendChild(createIforThumbsDown)
             createArticle.appendChild(newPostStats);
@@ -220,6 +295,23 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
         console.log("Brak odpowiedzi w wątku.");
     }
 })
+
+function deleteComment(createDeletingElement, postID) {
+    createDeletingElement.addEventListener("click", function () {
+        if (confirm("Potwierdź usuwanie tego komentarza.")) {
+            firebase
+                .database()
+                .ref("/threads/" + getUrlID + "/_responses/" + postID)
+                .remove()
+                .then(() => {
+                    location.assign("../pages/thread.html?id=" + getUrlID);
+                })
+        } else {
+            window.alert("Anulowałeś usuwanie posta.")
+        }
+    });
+
+}
 /* ------------------------------------------------------------------------------------------------------------ */
 
 /* POBIERANIE TYTUŁU WĄTKU I AUTORA - POTRZEBNE DO ZAPISYWANIA WĄTKÓW */

@@ -56,6 +56,7 @@ function addNewThreadInMainContainer() {
                         thumbs_up: 0,
                         thumbs_down: 0,
                         referCar: getReferCar,
+                        userUid: user_id,
                     }).then(() => {
                         location.assign("index.html")
                     })
