@@ -404,3 +404,73 @@ footer {
     justify-content: center;
     align-items: center;
 }
+
+#EditComment {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    background: #EDE0D4;
+    overflow: hidden;
+
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+    /*FlexBox Container*/
+    display: none;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#EditComment>header {
+    background-color: #B08968;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+#EditComment.active {
+    display: flex;
+}
+
+.blur {
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+
+#EditComment>textarea {
+    font-size: 3vh;
+    margin-top: 2%;
+    padding: 1%;
+    width: 95%;
+    resize: none;
+    min-height: 50%;
+    height: auto;
+}
+
+#EditCommentButtons {
+    width: 95%;
+    height: 10%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#EditCommentButtons>button {
+    margin-left: 2%;
+    width: 20%;
+    height: 100%;
+    border: 0;
+}
+
+#submitEdited {
+    background-color: #B08968;
+}
+
+#cancelEdited {
+    background-color: #E6CCB2;
+}

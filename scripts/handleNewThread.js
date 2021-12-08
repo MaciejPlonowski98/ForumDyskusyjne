@@ -37,9 +37,9 @@ dbRef.child("threads/" + getUrlID).get().then((
         var createH4forUser = document.createElement("h4")
 
         newPostInfo.setAttribute("class", "newPostInfo");
-
+        var autor = snapshot.val().author
         createH4forData.appendChild(document.createTextNode(snapshot.val().creation_date));
-        createH4forUser.appendChild(document.createTextNode(snapshot.val().author));
+        createH4forUser.appendChild(document.createTextNode(autor));
         newPostInfo.appendChild(createH4forData);
         newPostInfo.appendChild(createH4forUser);
         createArticle.appendChild(newPostInfo);
@@ -80,7 +80,8 @@ dbRef.child("threads/" + getUrlID).get().then((
                 dbRef.child("users").child(user_id).child("userInfo").get().then((
                     snapshot) => {
                     if (snapshot.exists()) {
-                        if (snapshot.val().accountType == "Administrator") {
+                        if (snapshot.val().accountType == "Administrator" && user.email != autor) {
+                            console.log(snapshot.val().accountType, autor)
                             /* USUWANIE CAŁEGO WĄTKU ROZMÓW Z POZIOMU ADMINISTRATORA */
                             var createDeletingElement = document.createElement("i");
                             createDeletingElement.setAttribute("class", "fas fa-folder-minus");
@@ -93,6 +94,8 @@ dbRef.child("threads/" + getUrlID).get().then((
                             blockAccount(createBlockingUserElement, authorUid);
                             newPostOptions.appendChild(createBlockingUserElement);
 
+
+
                         }
                     }
                 })
@@ -101,9 +104,74 @@ dbRef.child("threads/" + getUrlID).get().then((
     } else {
         console.log("No data available");
     }
+    firebase.auth().onAuthStateChanged((user) => {
+        var checkCurrentUser = firebase.auth().currentUser;
+        if (user && user.emailVerified) {
+            if (checkCurrentUser.email == snapshot.val().author) {
+                /* PRZYCISK DO USUWANIA WŁASNEGO KOMENTARZA */
+                var createDeletingElement = document.createElement("i");
+                createDeletingElement.setAttribute("class", "fas fa-folder-minus");
+                deletePost(createDeletingElement, getUrlID);
+                newPostOptions.appendChild(createDeletingElement);
+
+                /*PRZYCISK DO EDYTOWANIA WŁASNEGO KOMENTARZA */
+                var createEditingElement = document.createElement("i");
+                createEditingElement.setAttribute("class", "fas fa-edit");
+                EditThread(createEditingElement, getUrlID);
+                newPostOptions.appendChild(createEditingElement);
+            }
+        }
+    })
+
+
 })
 
-/*USUWANIE CAŁEGO POSTA Z POZIOMU ADMINISTRATORA */
+/*EDYCJA GŁÓWNEGO WĄTKU */
+function EditThread(createEditingElement, klucz) {
+    createEditingElement.addEventListener("click", function () {
+        var editingCommentPopup = document.getElementById("EditComment");
+        editingCommentPopup.classList.add("active");
+
+        var getMain = document.querySelector("section");
+        getMain.classList.add("blur");
+
+
+        var editingCommentTextarea = document.querySelector("#EditComment>textarea");
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                dbRef.child("threads").child(getUrlID).get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        var oldContent = snapshot.val().content;
+                        editingCommentTextarea.value = oldContent;
+                        closeEditComment(editingCommentTextarea);
+                        sendEditedThreadToDatabase(klucz);
+                    }
+                })
+            }
+        })
+
+    })
+}
+
+function sendEditedThreadToDatabase() {
+    var getSaveButton = document.getElementById("submitEdited");
+    getSaveButton.addEventListener("click", function () {
+        var getNewCommentContent = document.querySelector("#EditComment>textarea").value;
+        firebase
+            .database()
+            .ref("/threads/" + getUrlID)
+            .update({
+                content: getNewCommentContent,
+            })
+            .then(() => location.assign("thread.html?id=" + getUrlID))
+            .catch((error) => {
+                console.error(error);
+            });
+    })
+}
+
+/*USUWANIE CAŁEGO POSTA - POPRZEZ OSOBĘ KTÓRA GO UTWORZYŁA*/
 function deletePost(createDeletingElement, postID) {
     createDeletingElement.addEventListener("click", function () {
         var user = firebase.auth().currentUser;
@@ -134,6 +202,8 @@ function blockAccount(createBlockingUserElement, account) {
         }
     });
 }
+
+
 /*SPRAWDZANIE CZY UŻYTKOWNIK JEST ZALOGOWANY, JEŚLI NIE TO NIE WYŚWIETLA MOŻLIWOŚCI DODAWANIA KOMENTARZY, JEŚLI TAK TO WYŚWIETLA FORMULARZ DODAWANIWA KOMENTARZA*/
 firebase.auth().onAuthStateChanged((user) => {
     if (user && user.emailVerified) {
@@ -233,14 +303,38 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
             createIforThumbsUp.appendChild(createH5forThumbsUp);
             createIforThumbsDown.appendChild(createH5forThumbsDown);
 
+            /* USUWANIE TYLKO I WYŁĄCZNIE WŁASNYCH KOMENTARZY - NAPISANYCH PRZEZ SAMEGO SIEBIE */
+            firebase.auth().onAuthStateChanged((user) => {
+                var checkCurrentUser = firebase.auth().currentUser;
+                if (user && user.emailVerified) {
+                    if (checkCurrentUser.email == wartosc.repAuthor) {
+                        /* PRZYCISK DO USUWANIA WŁASNEGO KOMENTARZA */
+                        var createDeletingElement = document.createElement("i");
+                        createDeletingElement.setAttribute("class", "fas fa-trash-alt");
+                        deleteComment(createDeletingElement, klucz);
+                        newPostOptions.appendChild(createDeletingElement);
+
+                        /*PRZYCISK DO EDYTOWANIA WŁASNEGO KOMENTARZA */
+                        var createEditingElement = document.createElement("i");
+                        createEditingElement.setAttribute("class", "fas fa-edit");
+                        EditComment(createEditingElement, klucz);
+                        newPostOptions.appendChild(createEditingElement);
+
+
+                    }
+                }
+            })
+
             /* DODANIE FUNKCJI ADMINISTRATORA DO USUWANIA POJEDYŃCZYCH KOMENTARZY */
             firebase.auth().onAuthStateChanged((user) => {
                 if (user && user.emailVerified) {
                     dbRef.child("users").child(user_id).child("userInfo").get().then((
                         snapshot) => {
                         if (snapshot.exists()) {
-                            if (snapshot.val().accountType == "Administrator") {
-                                /* USUWANIE CAŁEGO WĄTKU ROZMÓW Z POZIOMU ADMINISTRATORA */
+                            /* DRUGI ARGUMENT JEST PO TO ABY NIE DUPLIKOWAŁY SIĘ DWA ŚMIETNIKI DO USUWANIA POSTA
+                            Z RACJI TEGO ŻE ADMIN SAM NAPISAŁ POSTA I DLATEGO ŻE JEST ADMINEM  I JEDNOCZEŚNIE ŻEBY NIE MÓGL ZABLOKOWAĆ SAM SIEBIE*/
+                            if (snapshot.val().accountType == "Administrator" && firebase.auth().currentUser.email != wartosc.repAuthor) {
+                                /* USUWANIE POJEDYŃCZEGO KOMENTARZA  Z POZIOMU ADMINISTRATORA */
                                 var createDeletingElement = document.createElement("i");
                                 createDeletingElement.setAttribute("class", "fas fa-trash-alt");
                                 deleteComment(createDeletingElement, klucz);
@@ -370,3 +464,68 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 })
 /* ------------------------------------------------------------------------------------------------------------ */
+
+
+/* EDYTOWANIE KOMENTARZA -- EDITCOMMENT - nasluchuje na ikonke, po czym pobiera tresc z bazy i wyswietla ja w textarea
+po czym jest sa przesylane dane do funkcji wysylajacej nowa tresc komentarza do bazy - po uzyciu przycisku Zapisz */
+function EditComment(createEditingElement, klucz) {
+    createEditingElement.addEventListener("click", function () {
+        var editingCommentPopup = document.getElementById("EditComment");
+        editingCommentPopup.classList.add("active");
+
+        var getMain = document.querySelector("section");
+        getMain.classList.add("blur");
+
+
+        var editingCommentTextarea = document.querySelector("#EditComment>textarea");
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                dbRef.child("threads").child(getUrlID).child("_responses").child(klucz).get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        var oldContent = snapshot.val().repContent
+                        editingCommentTextarea.value = oldContent;
+                        closeEditComment(editingCommentTextarea);
+                        sendNewContentToDatabase(klucz);
+                    }
+                })
+            }
+        })
+
+    })
+}
+
+function sendNewContentToDatabase(klucz) {
+    var getSaveButton = document.getElementById("submitEdited");
+    getSaveButton.addEventListener("click", function () {
+        var getNewCommentContent = document.querySelector("#EditComment>textarea").value;
+        firebase
+            .database()
+            .ref("/threads/" + getUrlID + "/_responses/" + klucz)
+            .update({
+                repContent: getNewCommentContent,
+            })
+            .then(() => location.assign("thread.html?id=" + getUrlID))
+            .catch((error) => {
+                console.error(error);
+            });
+    })
+}
+
+
+/*Funkcja wyłączania popup i dzieki jquery usuwania zawartosci textarea przez co jesli drugi raz sie uzyje przycisku to tresc sie nie dubluje*/
+function closeEditComment(editingCommentTextarea) {
+    var closeEditButton = document.getElementById("cancelEdited");
+    var editingCommentPopup = document.getElementById("EditComment");
+
+
+
+    closeEditButton.addEventListener("click", function () {
+        editingCommentPopup.classList.remove("active")
+
+        var getMain = document.querySelector("section");
+        getMain.classList.remove("blur");
+        editingCommentTextarea.value = "";
+    })
+
+}

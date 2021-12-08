@@ -172,7 +172,6 @@ firebase.auth().onAuthStateChanged((user) => {
                     createOption.appendChild(document.createTextNode(wartosc.Mark +
                         " " + wartosc.Model))
                     getForm.appendChild(createOption);
-                    console.log(klucz, wartosc.Mark, wartosc.Model)
                 })
             }
         })
