@@ -37,32 +37,18 @@
         <header>Galeria zdjęć</header>
         <div class="gallery">
             <div class="smallPhotos">
-                <a data-lightbox="normalPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
-                <a data-lightbox="normalPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
-                <a data-lightbox="normalPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
-                <a data-lightbox="normalPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
-                <a data-lightbox="normalPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
+                <!-- <a data-lightbox="normalPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
+                        src="/images/Wykres.png" alt="Miniatura"></a> -->
 
             </div>
             <div class="bigPhotos">
-                <a data-lightbox="bestOfPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
-                <a data-lightbox="bestOfPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
-                <a data-lightbox="bestOfPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
-                        src="/images/Wykres.png" alt="Miniatura"></a>
+                <!-- <a data-lightbox="bestOfPhotos" data-title="Autor: Maciej Płonowski" href="/images/Wykres.png"><img
+                        src="/images/Wykres.png" alt="Miniatura"></a> -->
             </div>
         </div>
         <footer>
-            <input type="file" name="uploadPhotoToGallery" id="uploadPhotoToGallery" hidden>
-            <label for="uploadPhotoToGallery">Dodaj plik
-                <span id="file-chosen">No file chosen</span>
-            </label>
+            <input type="file" name="uploadPhotoToGallery" id="uploadPhotoToGallery" accept="image/*">
+            <button class="uploadPhotoToGalleryButton" onclick="uploadFile()">Wyślij!</button>
         </footer>
     </main>
 
@@ -91,7 +77,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
     <script src="../scripts/connectToFirebase.js"></script>
+    <script src="../scripts/Timestamp.js"></script>
 
     <script>
         firebase.auth().onAuthStateChanged((user) => {
@@ -102,6 +90,75 @@
                 document.getElementById("navLogin").href = "login.html"
             }
         });
+    </script>
+    <script>
+        let storageRef = firebase.storage().ref();
+
+        function uploadFile() {
+
+            firebase.auth().onAuthStateChanged((user) => {
+                let file = document.getElementById('uploadPhotoToGallery').files[0];
+                let storagePath = storageRef.child("gallery").child("uploadedPhotos").child("smallPhotos")
+                    .child(file.name);
+                let uploadFile = storagePath.put(file);
+
+                uploadFile.then(() => {
+                    uploadFile.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                        uploadFileToDatabase(file, downloadURL)
+                    });
+                    console.log("Dodało Plik")
+                }).catch(e => {
+                    console.log("Błąd wysyłania do bazy danych" + e);
+                })
+            });
+        }
+
+        function uploadFileToDatabase(file, path) {
+            var timestamp = Timestamp();
+            var user = firebase.auth().currentUser;
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user && user.emailVerified) {
+                    user_id = user.uid;
+                    firebase
+                        .database()
+                        .ref("/gallery/smallPhotos/" + timestamp)
+                        .set({
+                            file_name: file.name,
+                            file_path: path,
+                            author: user.email,
+
+                        }).then(() => {
+                            location.assign("gallery.html")
+                        })
+                }
+            });
+        }
+
+        const dbRef = firebase.database().ref();
+        dbRef.child("/gallery/smallPhotos").get().then((
+            snapshot) => {
+            if (snapshot.exists()) {
+                var getInfo = Object.entries(snapshot.val());
+                getInfo.map(([klucz, wartosc]) => {
+                    console.log(klucz, wartosc.author, wartosc.file_path)
+                    var getSmallPhotos = document.querySelector(".smallPhotos");
+
+                    var createAElement = document.createElement("a");
+                    createAElement.setAttribute("data-lightbox", "normalPhotos");
+                    createAElement.setAttribute("data-title", "Autor: " + wartosc.author)
+                    createAElement.setAttribute("href", wartosc.file_path)
+
+                    var createImgElement = document.createElement("img");
+                    createImgElement.setAttribute("src", wartosc.file_path)
+                    createImgElement.setAttribute("alt", "Miniatura")
+
+                    createAElement.appendChild(createImgElement);
+
+                    getSmallPhotos.appendChild(createAElement);
+
+                })
+            }
+        })
     </script>
 </body>
 

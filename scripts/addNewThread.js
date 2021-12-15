@@ -17,14 +17,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         })
 
 
-        /* Dodawanie pliku w tworzeniu nowego wątku */
-        const actualBtn = document.getElementById('newThreadImageUpload');
-
-        const fileChosen = document.getElementById('file-chosen');
-
-        actualBtn.addEventListener('change', function () {
-            fileChosen.textContent = this.files[0].name
-        })
     } else {
         document.getElementById('addNewThread').setAttribute("style", "display:none");
     }
@@ -34,17 +26,18 @@ firebase.auth().onAuthStateChanged(function (user) {
 function addNewThreadInMainContainer() {
     var topicInput = document.getElementById("topicInput").value;
     var contentInput = document.getElementById("contentInput").value;
-    var newThreadImageUpload = document.getElementById("newThreadImageUpload").value;
     var getReferCar = document.getElementById("referCar").value;
+    //var newThreadImageUpload = document.querySelector("#newThreadImageUpload").value;
+    var timestamp = Timestamp();
 
-    console.log(topicInput, contentInput, newThreadImageUpload);
+    //console.log(topicInput, contentInput, newThreadImageUpload);
     if (topicInput != "" && contentInput != "" && getReferCar != "") {
         firebase.auth().onAuthStateChanged((user) => {
             if (user && user.emailVerified) {
                 user_id = user.uid;
                 firebase
                     .database()
-                    .ref("/threads/" + Timestamp())
+                    .ref("/threads/" + timestamp)
                     .set({
                         author: user.email,
                         content: contentInput,
@@ -52,7 +45,7 @@ function addNewThreadInMainContainer() {
                         entries: 1,
                         thread_rate: 0,
                         title: topicInput,
-                        attached_file: newThreadImageUpload,
+                        //attached_file: newThreadImageUpload,
                         thumbs_up: 0,
                         thumbs_down: 0,
                         referCar: getReferCar,
@@ -65,11 +58,11 @@ function addNewThreadInMainContainer() {
                 document.getElementById("navLogin").href = "login.html"
             }
         });
+
     } else {
         window.alert("Uzupełnij wszystkie pola!");
     }
 }
-
 var getAside = document.querySelector("main>aside");
 /* WYŚWIETLANIE WSZYSTKICH WĄTKÓW */
 const dbRef = firebase.database().ref();

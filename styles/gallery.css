@@ -187,9 +187,10 @@ header {
     overflow: auto;
 }
 
-.gallery .smallPhotos {
+.gallery>.smallPhotos {
     width: 60%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     float: left;
     overflow-x: hidden;
 
@@ -200,7 +201,8 @@ header {
 
 }
 
-.smallPhotos a {
+.smallPhotos>a {
+    height: 50%;
     display: block;
     margin: 3vh;
     flex-basis: calc(50% - 6vh);
@@ -208,6 +210,9 @@ header {
 }
 
 img {
+    object-fit: cover;
+    width: 50%;
+    height: 100%;
     display: block;
     width: 100%;
 
@@ -240,37 +245,44 @@ footer {
     text-align: center;
 
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
 }
 
 #uploadPhotoToGallery {
-    width: 10%;
-    height: 50%;
-    background-color: #B08968;
-    border: 0;
-    font-size: 1.5vh;
-    color: white;
-}
-
-
-/* DODAJ ZDJECIE */
-label {
-    display: inline-block;
-    background-color: #B08968;
-    color: white;
-    padding: 1rem;
-    font-style: 'Quicksand', sans-serif;
-    border-radius: 0.3rem;
+    width: auto;
+    height: 80%;
+    padding: 2vh;
     cursor: pointer;
+    text-align: center;
+    font-size: 2vh;
+    color: black;
+
+    background-color: #B08968;
+    font-style: 'Quicksand', sans-serif;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
 
 }
 
-#file-chosen {
-    margin-left: 0.3rem;
-    font-family: sans-serif;
+.uploadPhotoToGalleryButton {
+    width: auto;
+    height: 80%;
+    padding: 2vh;
+    cursor: pointer;
+    border: 0;
+    font-size: 2vh;
+    color: black;
+
+    background-color: #B08968;
+    border-left: 1px solid black;
+    font-style: 'Quicksand', sans-serif;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
+
+
 
 #addNewThreadButton {
     position: absolute;
