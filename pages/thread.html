@@ -70,12 +70,11 @@
                 <button id="addNewCommentButton" onclick="addNewCommentFunction()">Dodaj post</button>
             </div>
             <div class="addNewCommentAttachment">
-                <i class="far fa-images"></i>
-
+                <input type="file" id="newCommentAttachment" name="newCommentAttachment" accept="image/*">
             </div>
         </footer>
     </section>
-    <div id="EditComment">
+    <div id=" EditComment">
         <header>
             <h2>Edytuj swój komentarz</h2>
         </header>
@@ -97,6 +96,13 @@
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
+    <script src="/lib/lightbox2-2.11.3/dist/js/lightbox-plus-jquery.js"></script>
+
+    <script>
+        lightbox.option({
+            'albumLabel': "Zdjęcie %1 z %2"
+        })
+    </script>
 
 
     <script src="../scripts/connectToFirebase.js"></script>

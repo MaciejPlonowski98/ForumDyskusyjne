@@ -267,10 +267,16 @@ article {
 
 .newPostContent {
     width: 60%;
+    height: 100%;
     text-align: justify;
     padding: 2%;
     overflow-wrap: break-word;
 
+    /*FlexBoxContainer*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .newPostInfo {
@@ -473,4 +479,16 @@ footer {
 
 #cancelEdited {
     background-color: #E6CCB2;
+}
+
+
+/* .imageSection {
+    width: 20%;
+    height: 20%;
+} */
+
+.imageSection>a>img {
+    margin-top: 1vh;
+    width: 20%;
+    height: 100%;
 }

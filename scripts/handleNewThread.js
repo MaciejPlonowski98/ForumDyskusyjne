@@ -29,8 +29,30 @@ dbRef.child("threads/" + getUrlID).get().then((
 
         var newPostContent = document.createElement("div")
         newPostContent.setAttribute("class", "newPostContent");
+
         newPostContent.appendChild(document.createTextNode(snapshot.val().content));
         createArticle.appendChild(newPostContent)
+
+
+        if (snapshot.val().attached_file != "") {
+
+            var createImageSection = document.createElement("div");
+            var aElementToImageSection = document.createElement("a")
+            var createImg = document.createElement("img");
+
+            createImageSection.setAttribute("class", "imageSection")
+
+            aElementToImageSection.setAttribute("data-lightbox", "normalPhotos")
+            aElementToImageSection.setAttribute("data-title", "Autor: " + snapshot.val().author)
+            aElementToImageSection.setAttribute("href", snapshot.val().attached_file)
+
+            createImg.setAttribute("src", snapshot.val().attached_file);
+            createImg.setAttribute("alt", "Miniatura");
+
+            aElementToImageSection.appendChild(createImg);
+            createImageSection.appendChild(aElementToImageSection);
+            newPostContent.appendChild(createImageSection);
+        }
 
         var newPostInfo = document.createElement("div")
         var createH4forData = document.createElement("h4")
@@ -67,6 +89,8 @@ dbRef.child("threads/" + getUrlID).get().then((
 
         createH5forThumbsUp.appendChild(document.createTextNode(snapshot.val().thumbs_up));
         createH5forThumbsDown.appendChild(document.createTextNode(snapshot.val().thumbs_down));
+
+
 
         createIforThumbsUp.appendChild(createH5forThumbsUp);
         createIforThumbsDown.appendChild(createH5forThumbsDown);
@@ -215,35 +239,30 @@ firebase.auth().onAuthStateChanged((user) => {
 
 /*DODAWANIE NOWYCH KOMENTARZY*/
 function addNewCommentFunction() {
+    let storageRef = firebase.storage().ref();
+
     var getTimestamp = Timestamp();
 
     var newCommentInput = document.getElementById("newCommentInput").value;
+    let file = document.getElementById('newCommentAttachment').files[0];
+
     if (newCommentInput == "") {
         window.alert("Aby dodać nowy komentarz, pole tekstowe nie może być puste")
+    } else if (document.getElementById('newCommentAttachment').files.length === 0) {
+        saveCommentInDatabase(getTimestamp, "", newCommentInput)
     } else {
+        let storagePath = storageRef.child("threads").child(getUrlID).child("_responses").child(getTimestamp)
+            .child(file.name);
 
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
-                user_id = user.uid;
-                firebase
-                    .database()
-                    .ref("/threads/" + getUrlID + "/_responses/" + getTimestamp)
-                    .set({
-                        repId: getTimestamp,
-                        repDate: getTodayDate(),
-                        repAuthor: user.email,
-                        repThumbsUp: 0,
-                        repThumbsDown: 0,
-                        repContent: newCommentInput,
-                    }).then(() => {
-                        location.assign("thread.html?id=" + getUrlID);
-                    })
-            } else {
-                console.log("error")
-                document.getElementById("navLogin").href = "login.html"
-            }
-        });
-
+        let uploadFile = storagePath.put(file);
+        uploadFile.then(() => {
+            uploadFile.snapshot.ref.getDownloadURL().then(function getPhotoUrl(downloadURL) {
+                saveCommentInDatabase(getTimestamp, downloadURL, newCommentInput);
+            });
+            console.log("Dodało Plik")
+        }).catch(e => {
+            console.log("Błąd wysyłania do bazy danych" + e);
+        })
 
     }
 }
@@ -270,6 +289,25 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
             var newPostContent = document.createElement("div")
             newPostContent.setAttribute("class", "newPostContent");
             newPostContent.appendChild(document.createTextNode(wartosc.repContent));
+
+            if (wartosc.repAttachment != "") {
+                var createImageSection = document.createElement("div");
+                var aElementToImageSection = document.createElement("a")
+                var createImg = document.createElement("img");
+
+                createImageSection.setAttribute("class", "imageSection")
+
+                aElementToImageSection.setAttribute("data-lightbox", "normalPhotos")
+                aElementToImageSection.setAttribute("data-title", "Autor: " + wartosc.repAuthor)
+                aElementToImageSection.setAttribute("href", wartosc.repAttachment)
+
+                createImg.setAttribute("src", wartosc.repAttachment);
+                createImg.setAttribute("alt", "Miniatura");
+
+                aElementToImageSection.appendChild(createImg);
+                createImageSection.appendChild(aElementToImageSection);
+                newPostContent.appendChild(createImageSection);
+            }
             createArticle.appendChild(newPostContent)
 
             var newPostInfo = document.createElement("div")
@@ -389,6 +427,31 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
         console.log("Brak odpowiedzi w wątku.");
     }
 })
+
+function saveCommentInDatabase(getTimestamp, downloadURL, newCommentInput) {
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user && user.emailVerified) {
+            user_id = user.uid;
+            firebase
+                .database()
+                .ref("/threads/" + getUrlID + "/_responses/" + getTimestamp)
+                .set({
+                    repId: getTimestamp,
+                    repDate: getTodayDate(),
+                    repAuthor: user.email,
+                    repThumbsUp: 0,
+                    repThumbsDown: 0,
+                    repContent: newCommentInput,
+                    repAttachment: downloadURL
+                }).then(() => {
+                    location.assign("thread.html?id=" + getUrlID);
+                })
+        } else {
+            console.log("error")
+            document.getElementById("navLogin").href = "login.html"
+        }
+    });
+}
 
 function deleteComment(createDeletingElement, postID) {
     createDeletingElement.addEventListener("click", function () {

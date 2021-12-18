@@ -244,7 +244,7 @@ footer {
     background-color: #E6CCB2;
     text-align: center;
 
-    display: flex;
+    display: none;
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;

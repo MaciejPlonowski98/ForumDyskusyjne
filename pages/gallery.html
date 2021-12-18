@@ -57,15 +57,6 @@
         lightbox.option({
             'albumLabel': "Zdjęcie %1 z %2"
         })
-
-        /* Dodawanie pliku w tworzeniu nowego wątku */
-        const actualBtn = document.getElementById('uploadPhotoToGallery');
-
-        const fileChosen = document.getElementById('file-chosen');
-
-        actualBtn.addEventListener('change', function () {
-            fileChosen.textContent = this.files[0].name
-        })
     </script>
     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
@@ -83,7 +74,6 @@
 
     <script>
         firebase.auth().onAuthStateChanged((user) => {
-            console.log(user)
             if (user && user.emailVerified) {
                 document.getElementById("navLogin").href = "account.html"
             } else {
@@ -92,10 +82,18 @@
         });
     </script>
     <script>
+        /*W ZALEŻNOŚCI CZY UŻTOWNIK ZALOGOWANY - POKAŻ FORMULARZ DODAWANIA ZDJĘĆ */
+        let getUploadForm = document.querySelector("footer");
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                getUploadForm.setAttribute("style", "display:flex");
+            }
+        })
+
         let storageRef = firebase.storage().ref();
 
+        /*DODANIE ZDJĘĆ DO STORAGE */
         function uploadFile() {
-
             firebase.auth().onAuthStateChanged((user) => {
                 let file = document.getElementById('uploadPhotoToGallery').files[0];
                 let storagePath = storageRef.child("gallery").child("uploadedPhotos").child("smallPhotos")
@@ -112,7 +110,7 @@
                 })
             });
         }
-
+        /*WYŚLIJ ZDJĘCIA ORAZ INFORMACJE DO BAZY DANYCH */
         function uploadFileToDatabase(file, path) {
             var timestamp = Timestamp();
             var user = firebase.auth().currentUser;
@@ -134,6 +132,7 @@
             });
         }
 
+        /*WYŚWIETL ZDJĘCIA DOSTĘPNE W MAŁEJ GALERII*/
         const dbRef = firebase.database().ref();
         dbRef.child("/gallery/smallPhotos").get().then((
             snapshot) => {
@@ -159,6 +158,35 @@
                 })
             }
         })
+
+        storageRef.child("gallery").child("uploadedPhotos").child("bigPhotos").listAll()
+            .then((res) => {
+                res.prefixes.forEach((folderRef) => {
+                    // All the prefixes under listRef.
+                    // You may call listAll() recursively on them.
+                });
+                res.items.forEach((itemRef) => {
+                    itemRef.getDownloadURL().then(url => {
+                        var getSmallPhotos = document.querySelector(".bigPhotos");
+
+                        var createAElement = document.createElement("a");
+                        createAElement.setAttribute("data-lightbox", "bestOfPhotos");
+                        createAElement.setAttribute("data-title", "Autor: ")
+                        createAElement.setAttribute("href", url)
+
+                        var createImgElement = document.createElement("img");
+                        createImgElement.setAttribute("src", url)
+                        createImgElement.setAttribute("alt", "Miniatura")
+
+                        createAElement.appendChild(createImgElement);
+
+                        getSmallPhotos.appendChild(createAElement);
+
+                    })
+                });
+            }).catch((error) => {
+                // Uh-oh, an error occurred!
+            });
     </script>
 </body>
 
