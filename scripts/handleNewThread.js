@@ -57,6 +57,38 @@ dbRef.child("threads/" + getUrlID).get().then((
         var newPostInfo = document.createElement("div")
         var createH4forData = document.createElement("h4")
         var createH4forUser = document.createElement("h4")
+        var createIForUserFollow = document.createElement("i");
+        createIForUserFollow.setAttribute("class", "far fa-check-circle")
+        var currentLoggedInUser = firebase.auth().currentUser;
+
+        var tmpCommentAuthorUid = snapshot.val().userUid;
+        /* SPRAWDZENIE CZY JUŻ POLAJKOWAŁ DANY UŻYTOWNIK INNY PROFIL, JESLI TAK TO ZMIEN KOLOR */
+        if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+            dbRef.child("/users/" + tmpCommentAuthorUid + "/userInfo/followedBy/" + currentLoggedInUser.uid).get().then((
+                snapshot) => {
+                if (snapshot.val())
+                    if (snapshot.exists()) {
+                        createIForUserFollow.setAttribute("class", "fas fa-check-circle")
+                    } else {
+                        createIForUserFollow.setAttribute("class", "far fa-check-circle")
+                    }
+            })
+        }
+
+        /* OBSŁUGA POLUBIANIA PROFILU UŻYTKOWNIKA */
+        createIForUserFollow.addEventListener("click", function () {
+            if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+                if (createIForUserFollow.classList.contains("far")) {
+                    followUser(createIForUserFollow, snapshot.val(), currentLoggedInUser);
+                } else if (createIForUserFollow.classList.contains("fas")) {
+                    unfollowUser(createIForUserFollow, snapshot.val(), currentLoggedInUser);
+                }
+            } else {
+                alert("Aby polubić profil musisz się zalogować!")
+            }
+
+        })
+
 
         newPostInfo.setAttribute("class", "newPostInfo");
         var autor = snapshot.val().author
@@ -64,39 +96,66 @@ dbRef.child("threads/" + getUrlID).get().then((
         createH4forUser.appendChild(document.createTextNode(autor));
         newPostInfo.appendChild(createH4forData);
         newPostInfo.appendChild(createH4forUser);
+        newPostInfo.appendChild(createIForUserFollow);
         createArticle.appendChild(newPostInfo);
 
 
         var newPostStats = document.createElement("div");
         var createIforThumbsUp = document.createElement("i");
-        var createIforThumbsDown = document.createElement("i");
         var createH5forThumbsUp = document.createElement("h5");
-        var createH5forThumbsDown = document.createElement("h5");
+
+        createIforThumbsUp.setAttribute("class", "far fa-thumbs-up")
         newPostStats.setAttribute("class", "newPostStats");
 
-        if (snapshot.val().skreslono == true) {
-            createIforThumbsUp.className = "fas fa-thumbs-up";
-        } else {
-            createIforThumbsUp.setAttribute("class", "far fa-thumbs-up");
+        /* SPRAWDZENIE CZY JUŻ POLAJKOWAŁ DANY UŻYTOWNIK, JESLI TAK TO ZMIEN KOLOR */
+        if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+            dbRef.child("threads/" + getUrlID + "/likedBy").get().then((
+                snapshot) => {
+                if (snapshot.exists()) {
+                    var getInfo = Object.keys(snapshot.val());
+                    getInfo.forEach((ex) => {
+                        if (ex == currentLoggedInUser.uid) {
+                            createIforThumbsUp.setAttribute("class", "fas fa-thumbs-up")
+                        }
+                    });
+                }
+            })
         }
 
-        createIforThumbsDown.setAttribute("class", "far fa-thumbs-down");
 
+        /* OBSŁUGA LIKOWANIA */
+        createIforThumbsUp.addEventListener("click", function () {
+            if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+                if (createIforThumbsUp.classList.contains('fas')) {
+                    dislikeComment(createIforThumbsUp, currentLoggedInUser, getUrlID);
 
+                } else if (createIforThumbsUp.classList.contains('far')) {
+                    likeComment(createIforThumbsUp, currentLoggedInUser, getUrlID);
+                }
+            } else {
+                alert("Aby polubić komentarz musisz się zalogować!");
+            }
 
+        })
 
         createIforThumbsUp.setAttribute("aria-hidden", "true");
 
-        createH5forThumbsUp.appendChild(document.createTextNode(snapshot.val().thumbs_up));
-        createH5forThumbsDown.appendChild(document.createTextNode(snapshot.val().thumbs_down));
+
+        var likes = snapshot.val().thumbs_up
+        dbRef.child("threads/" + getUrlID + "/likedBy").get().then((
+            snapshot) => {
+            if (snapshot.val() == null) {
+                createH5forThumbsUp.appendChild(document.createTextNode("0"))
+            } else {
+                createH5forThumbsUp.appendChild(document.createTextNode(likes))
+            }
+        })
 
 
 
         createIforThumbsUp.appendChild(createH5forThumbsUp);
-        createIforThumbsDown.appendChild(createH5forThumbsDown);
 
         newPostStats.appendChild(createIforThumbsUp)
-        newPostStats.appendChild(createIforThumbsDown)
         createArticle.appendChild(newPostStats);
 
         firebase.auth().onAuthStateChanged((user) => {
@@ -298,7 +357,7 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
                 createImageSection.setAttribute("class", "imageSection")
 
                 aElementToImageSection.setAttribute("data-lightbox", "normalPhotos")
-                aElementToImageSection.setAttribute("data-title", "Autor: " + wartosc.repAuthor)
+                aElementToImageSection.setAttribute("data-title", "Autor: " + wartosc.author)
                 aElementToImageSection.setAttribute("href", wartosc.repAttachment)
 
                 createImg.setAttribute("src", wartosc.repAttachment);
@@ -313,11 +372,42 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
             var newPostInfo = document.createElement("div")
             var createH4forData = document.createElement("h4")
             var createH4forUser = document.createElement("h4")
+            var createIForUserFollow = document.createElement("i");
+            createIForUserFollow.setAttribute("class", "far fa-check-circle")
+            var currentLoggedInUser = firebase.auth().currentUser;
+
+            var tmpCommentAuthorUid = wartosc.userUid;
+            /* SPRAWDZENIE CZY JUŻ POLAJKOWAŁ DANY UŻYTOWNIK INNY PROFIL, JESLI TAK TO ZMIEN KOLOR */
+            if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+                dbRef.child("/users/" + tmpCommentAuthorUid + "/userInfo/followedBy/" + currentLoggedInUser.uid).get().then((
+                    snapshot) => {
+                    if (snapshot.val())
+                        if (snapshot.exists()) {
+                            createIForUserFollow.setAttribute("class", "fas fa-check-circle")
+                        } else {
+                            createIForUserFollow.setAttribute("class", "far fa-check-circle")
+                        }
+                })
+            }
+
+            /* OBSŁUGA POLUBIANIA PROFILU UŻYTKOWNIKA */
+            createIForUserFollow.addEventListener("click", function () {
+                if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+                    if (createIForUserFollow.classList.contains("far")) {
+                        followUser(createIForUserFollow, wartosc, currentLoggedInUser);
+                    } else if (createIForUserFollow.classList.contains("fas")) {
+                        unfollowUser(createIForUserFollow, wartosc, currentLoggedInUser);
+                    }
+                } else {
+                    alert("Aby polubić profil musisz się zalogować!")
+                }
+
+            })
 
             newPostInfo.setAttribute("class", "newPostInfo");
 
             createH4forData.appendChild(document.createTextNode(wartosc.repDate));
-            createH4forUser.appendChild(document.createTextNode(wartosc.repAuthor));
+            createH4forUser.appendChild(document.createTextNode(wartosc.author));
             newPostInfo.appendChild(createH4forData);
             newPostInfo.appendChild(createH4forUser);
             createArticle.appendChild(newPostInfo);
@@ -325,27 +415,63 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
 
             var newPostStats = document.createElement("div");
             var createIforThumbsUp = document.createElement("i");
-            var createIforThumbsDown = document.createElement("i");
             var createH5forThumbsUp = document.createElement("h5");
-            var createH5forThumbsDown = document.createElement("h5");
             newPostStats.setAttribute("class", "newPostStats");
 
             createIforThumbsUp.setAttribute("class", "far fa-thumbs-up");
-            createIforThumbsDown.setAttribute("class", "far fa-thumbs-down");
 
             createIforThumbsUp.setAttribute("aria-hidden", "true");
 
-            createH5forThumbsUp.appendChild(document.createTextNode(wartosc.repThumbsDown));
-            createH5forThumbsDown.appendChild(document.createTextNode(wartosc.repThumbsUp));
+            dbRef.child("threads/" + getUrlID + "/_responses/" + klucz + "/likedBy").get().then((
+                snapshot) => {
+                if (snapshot.val() == null) {
+                    createH5forThumbsUp.appendChild(document.createTextNode("0"))
+                } else {
+                    createH5forThumbsUp.appendChild(document.createTextNode(wartosc.thumbs_up))
+                }
+            })
 
             createIforThumbsUp.appendChild(createH5forThumbsUp);
-            createIforThumbsDown.appendChild(createH5forThumbsDown);
+
+
+            var currentLoggedInUser = firebase.auth().currentUser;
+            /* SPRAWDZENIE CZY JUŻ POLAJKOWAŁ DANY UŻYTOWNIK, JESLI TAK TO ZMIEN KOLOR */
+            if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+                dbRef.child("threads/" + getUrlID + "/_responses/" + klucz + "/likedBy").get().then((
+                    snapshot) => {
+                    if (snapshot.exists()) {
+                        var getInfo = Object.keys(snapshot.val());
+                        getInfo.forEach((ex) => {
+                            if (ex == currentLoggedInUser.uid) {
+                                createIforThumbsUp.setAttribute("class", "fas fa-thumbs-up")
+                            }
+                        });
+                    }
+                })
+            }
+
+
+            /* OBSŁUGA LIKOWANIA */
+            createIforThumbsUp.addEventListener("click", function () {
+                if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+                    if (createIforThumbsUp.classList.contains('fas')) {
+                        dislikeComment(createIforThumbsUp, currentLoggedInUser, getUrlID + "/_responses/" + klucz);
+
+                    } else if (createIforThumbsUp.classList.contains('far')) {
+                        likeComment(createIforThumbsUp, currentLoggedInUser, getUrlID + "/_responses/" + klucz);
+                    }
+                } else {
+                    alert("Aby polubić komentarz musisz się zalogować!");
+                }
+
+            })
+
 
             /* USUWANIE TYLKO I WYŁĄCZNIE WŁASNYCH KOMENTARZY - NAPISANYCH PRZEZ SAMEGO SIEBIE */
             firebase.auth().onAuthStateChanged((user) => {
                 var checkCurrentUser = firebase.auth().currentUser;
                 if (user && user.emailVerified) {
-                    if (checkCurrentUser.email == wartosc.repAuthor) {
+                    if (checkCurrentUser.email == wartosc.author) {
                         /* PRZYCISK DO USUWANIA WŁASNEGO KOMENTARZA */
                         var createDeletingElement = document.createElement("i");
                         createDeletingElement.setAttribute("class", "fas fa-trash-alt");
@@ -371,7 +497,7 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
                         if (snapshot.exists()) {
                             /* DRUGI ARGUMENT JEST PO TO ABY NIE DUPLIKOWAŁY SIĘ DWA ŚMIETNIKI DO USUWANIA POSTA
                             Z RACJI TEGO ŻE ADMIN SAM NAPISAŁ POSTA I DLATEGO ŻE JEST ADMINEM  I JEDNOCZEŚNIE ŻEBY NIE MÓGL ZABLOKOWAĆ SAM SIEBIE*/
-                            if (snapshot.val().accountType == "Administrator" && firebase.auth().currentUser.email != wartosc.repAuthor) {
+                            if (snapshot.val().accountType == "Administrator" && firebase.auth().currentUser.email != wartosc.author) {
                                 /* USUWANIE POJEDYŃCZEGO KOMENTARZA  Z POZIOMU ADMINISTRATORA */
                                 var createDeletingElement = document.createElement("i");
                                 createDeletingElement.setAttribute("class", "fas fa-trash-alt");
@@ -390,8 +516,8 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
             })
 
             newPostStats.appendChild(createIforThumbsUp)
-            newPostStats.appendChild(createIforThumbsDown)
             createArticle.appendChild(newPostStats);
+            newPostInfo.appendChild(createIForUserFollow);
         })
 
         /* DLACZEGO TO WŁAŚNIE TUTAJ POWINNO SIĘ ODBYWAĆ LICZENIE ILOŚĆI WĄTKÓW I AKTUALIZACJA DO BAZY DANYCH? 
@@ -438,11 +564,11 @@ function saveCommentInDatabase(getTimestamp, downloadURL, newCommentInput) {
                 .set({
                     repId: getTimestamp,
                     repDate: getTodayDate(),
-                    repAuthor: user.email,
-                    repThumbsUp: 0,
-                    repThumbsDown: 0,
+                    author: user.email,
+                    thumbs_up: 0,
                     repContent: newCommentInput,
-                    repAttachment: downloadURL
+                    repAttachment: downloadURL,
+                    userUid: user.uid,
                 }).then(() => {
                     location.assign("thread.html?id=" + getUrlID);
                 })
