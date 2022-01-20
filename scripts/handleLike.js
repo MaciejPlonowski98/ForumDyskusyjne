@@ -2,7 +2,7 @@
 var timestamp = Timestamp();
 
 function likeComment(element, user, dbRecord) {
-    console.log(dbRecord)
+    //console.log(dbRecord)
     element.setAttribute("class", "fas fa-thumbs-up");
     firebase
         .database()
@@ -44,10 +44,10 @@ function dislikeComment(element, user, dbRecord) {
         } else {
             var getInfo = Object.values(snapshot.val());
             if (snapshot.exists()) {
-                console.log(getInfo)
+                //console.log(getInfo)
                 element.childNodes[0].innerHTML = getInfo.length;
             }
-            console.log(getInfo.length)
+            //console.log(getInfo.length)
             firebase
                 .database()
                 .ref("/threads/" + dbRecord)
@@ -120,4 +120,68 @@ function unfollowUser(element, commentInfo, currentLoggedInUser) {
                 })
         }
     })
+}
+
+/* --------------------- OCENA WĄTKU ----------------------------- */
+
+var getRateButton = document.getElementById("rateThread");
+
+getRateButton.addEventListener("click", function () {
+    var getRateForm = document.getElementById("rateBox");
+    getRateForm.setAttribute("style", "display:flex")
+
+
+})
+
+function rateThread() {
+    const getUrlID = urlParams.get('id')
+    var getRateForm = document.getElementById("rateForm");
+    var value = getRateForm.options[getRateForm.selectedIndex].value;
+    var currentLoggedInUser = firebase.auth().currentUser;
+    var avg;
+
+    if (currentLoggedInUser && currentLoggedInUser.emailVerified) {
+        firebase
+            .database()
+            .ref("/threads/" + getUrlID + "/ratedBy/" + currentLoggedInUser.uid)
+            .update({
+                date: timestamp,
+                rate: value,
+                userEmail: currentLoggedInUser.email,
+            })
+            .then(() => location.assign("thread.html?id=" + getUrlID))
+
+
+
+        dbRef.child("/threads/" + getUrlID + "/ratedBy/").get().then((
+            snapshot) => {
+            var getInfo = Object.entries(snapshot.val());
+            var countRates = 0;
+            var countUsers = getInfo.length;
+
+
+            getInfo.map(([klucz, wartosc]) => {
+                countRates += wartosc.rate * 1;
+            })
+
+            avg = parseInt(countRates / countUsers, 10);
+
+            firebase
+                .database()
+                .ref("/threads/" + getUrlID)
+                .update({
+                    thread_rate: avg,
+                })
+
+        })
+    } else {
+        alert("Aby ocenić wątek musisz się zalogować!");
+    }
+
+
+}
+
+function cancelRateForm() {
+    var getRateForm = document.getElementById("rateBox");
+    getRateForm.setAttribute("style", "display:none")
 }

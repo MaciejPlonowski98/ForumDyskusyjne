@@ -39,7 +39,7 @@ function changePassword() {
                     .signInWithEmailAndPassword(email, oldPassword)
                     .then(function (user) {
                         firebase.auth().currentUser.updatePassword(newPassword1).then(function () {
-                            console.log(email, oldPassword, newPassword1)
+                            //console.log(email, oldPassword, newPassword1)
                             location.href = "account.html"
                         })
                     }).catch((error) => {
@@ -81,7 +81,7 @@ firebase.auth().onAuthStateChanged((user) => {
                     .accountRates;
                 /* ODCZYTYWANIE WARTOŚCI PO KLUCZU !!!!!!!!!! */
             } else {
-                console.log("No data available");
+                //console.log("No data available");
             }
         }).catch((error) => {
             console.error(error);

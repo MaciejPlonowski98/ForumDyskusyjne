@@ -259,13 +259,10 @@ footer {
     font-size: 2vh;
     color: black;
 
-    background-color: #B08968;
-    font-style: 'Quicksand', sans-serif;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
 
 }
 
+/* 
 .uploadPhotoToGalleryButton {
     width: auto;
     height: 80%;
@@ -280,7 +277,7 @@ footer {
     font-style: 'Quicksand', sans-serif;
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
-}
+} */
 
 
 
@@ -294,4 +291,72 @@ footer {
     border-bottom-right-radius: 20px;
     background-color: #B08968;
     border: 0;
+}
+
+/**** MEDIA ****/
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    /* ----------------------------------------- */
+
+    #firstNavElement {
+        width: 33%;
+    }
+
+    #siteLogo {
+        width: 100%;
+    }
+
+    #firstLogoElement {
+        font-size: 2vh;
+    }
+
+    #secondLogoElement {
+        font-size: 1.2vh;
+    }
+
+    #searchBox {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 25%;
+        width: 100%;
+    }
+
+    #secondNavElement {
+        width: 33%;
+    }
+
+
+    #thirdNavElement {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        width: 33%;
+    }
+
+    #thirdNavElement>a {
+        margin-top: 5%;
+        font-size: 1.4vh;
+    }
+}
+
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+
+    .gallery>.smallPhotos {
+        flex-flow: column nowrap;
+        height: auto;
+        width: auto;
+    }
+
+    .gallery>.bigPhotos {
+        display: none;
+    }
+
+    .gallery>.smallPhotos>a {
+        width: 95%;
+    }
 }

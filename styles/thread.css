@@ -185,16 +185,22 @@ header {
     justify-content: center;
 }
 
-header>h1 {
-    align-self: center;
-    clear: both;
-    position: absolute;
-}
 
 header>.threadDate {
     align-self: flex-end;
     margin-right: 2%;
     position: absolute;
+}
+
+#headerActionBox {
+    align-self: flex-start;
+    margin-right: 2%;
+    position: absolute;
+
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 header>.far.fa-bookmark {
@@ -211,6 +217,45 @@ header>.fas.fa-bookmark {
     position: absolute;
     margin-left: 2%;
     cursor: pointer;
+}
+
+#rateBox {
+    width: 30%;
+    border-radius: 20px;
+    height: 60%;
+    background-color: #03071E;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 2vh;
+    transform: translate(-50%, -50%);
+    border: 1px solid white;
+    text-align: center;
+
+    display: none;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#rateBox>button {
+    width: 60%;
+    height: 10%;
+    font-size: 2vh;
+}
+
+#rateForm {
+    margin: 5%;
+    font-size: 3vh;
+    z-index: 5;
+}
+
+#cancelRateForm {
+    position: absolute;
+    top: 0;
+    right: 0;
+
 }
 
 /*Kontener na wszystkie komenatarze w poście */
@@ -491,4 +536,180 @@ footer {
     margin-top: 1vh;
     width: 20%;
     height: 100%;
+}
+
+/**** MEDIA ****/
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    /* ----------------------------------------- */
+
+    #firstNavElement {
+        width: 33%;
+    }
+
+    #siteLogo {
+        width: 100%;
+    }
+
+    #firstLogoElement {
+        font-size: 2vh;
+    }
+
+    #secondLogoElement {
+        font-size: 1.2vh;
+    }
+
+    #searchBox {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 25%;
+        width: 100%;
+    }
+
+    #secondNavElement {
+        width: 33%;
+    }
+
+
+    #thirdNavElement {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        width: 33%;
+    }
+
+    #thirdNavElement>a {
+        margin-top: 5%;
+        font-size: 1.4vh;
+    }
+}
+
+/*---------- WĄTEK ------- */
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    section {
+        width: 95%;
+    }
+
+    header>h1 {
+        word-break: break-all;
+    }
+
+    header {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+
+    }
+
+    header>.threadDate {
+        align-self: center;
+        position: relative;
+    }
+
+    #headerActionBox {
+        flex-flow: row nowrap;
+        position: relative;
+        align-self: center;
+        font-size: 70%;
+        text-align: center;
+    }
+
+    #headerActionBox>i:nth-child(2) {
+        padding-left: 5vw;
+    }
+
+    /* ------------ */
+    article {
+        flex-flow: column nowrap;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 0px;
+    }
+
+    .newPostOptions {
+        border-radius: 20px;
+        flex-flow: nowrap row;
+        width: 100%;
+        height: 2%;
+    }
+
+    .newPostContent {
+        width: 100%;
+        padding: 5%;
+    }
+
+
+    .newPostInfo {
+        width: 100%;
+        font-size: 1.5vh;
+        flex-flow: row nowrap;
+        word-break: break-all;
+    }
+
+
+
+    .newPostInfo>h4:first-of-type {
+        border-bottom: 0;
+    }
+
+    .newPostStats {
+        border-radius: 0;
+        width: 100%;
+    }
+
+    footer {
+        flex-flow: nowrap column;
+        height: auto;
+    }
+
+    .addNewComment {
+        width: 100%;
+        flex-flow: column nowrap;
+    }
+
+    #newCommentInput {
+        width: 100%;
+    }
+
+    #addNewCommentButton {
+        width: 75%;
+        margin-top: 2vh;
+        padding: 2vh;
+    }
+
+    .addNewCommentAttachment {
+        width: 100%;
+    }
+
+    #newCommentInput {
+        font-size: 0.5vh;
+        width: 100%;
+    }
+
+    #newCommentAttachment {
+        width: 100%;
+    }
+
+    #rateBox {
+        width: 100%;
+    }
+
+    #EditComment {
+        width: 100%;
+        height: 70vh;
+    }
+
+    #EditCommentButtons>button {
+        width: 50%;
+    }
+
+    #EditCommentButtons {
+        width: 100%;
+    }
 }

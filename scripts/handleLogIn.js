@@ -8,7 +8,7 @@ function handleLogin() {
         .then(() => {
             var user = firebase.auth().currentUser;
             if (user && user.emailVerified) {
-                console.log("User logged in");
+                //console.log("User logged in");
                 location.href = "../index.html";
             } else {
                 getLoginErrorBox.innerHTML = "Aby się zalogować musisz potwierdzić swój adres e-mail!"
@@ -35,7 +35,7 @@ function handleLogin() {
                 }, 5000);
             }
             console.error(error);
-            console.log("Coś poszło nie tak!");
+            //console.log("Coś poszło nie tak!");
         })
 
 }

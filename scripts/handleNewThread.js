@@ -164,7 +164,6 @@ dbRef.child("threads/" + getUrlID).get().then((
                     snapshot) => {
                     if (snapshot.exists()) {
                         if (snapshot.val().accountType == "Administrator" && user.email != autor) {
-                            console.log(snapshot.val().accountType, autor)
                             /* USUWANIE CAŁEGO WĄTKU ROZMÓW Z POZIOMU ADMINISTRATORA */
                             var createDeletingElement = document.createElement("i");
                             createDeletingElement.setAttribute("class", "fas fa-folder-minus");
@@ -172,10 +171,10 @@ dbRef.child("threads/" + getUrlID).get().then((
                             newPostOptions.appendChild(createDeletingElement);
 
 
-                            var createBlockingUserElement = document.createElement("i");
-                            createBlockingUserElement.setAttribute("class", "fas fa-user-lock");
-                            blockAccount(createBlockingUserElement, authorUid);
-                            newPostOptions.appendChild(createBlockingUserElement);
+                            // var createBlockingUserElement = document.createElement("i");
+                            // createBlockingUserElement.setAttribute("class", "fas fa-user-lock");
+                            // blockAccount(createBlockingUserElement, authorUid);
+                            // newPostOptions.appendChild(createBlockingUserElement);
 
 
 
@@ -185,7 +184,7 @@ dbRef.child("threads/" + getUrlID).get().then((
             }
         })
     } else {
-        console.log("No data available");
+        //console.log("No data available");
     }
     firebase.auth().onAuthStateChanged((user) => {
         var checkCurrentUser = firebase.auth().currentUser;
@@ -318,9 +317,9 @@ function addNewCommentFunction() {
             uploadFile.snapshot.ref.getDownloadURL().then(function getPhotoUrl(downloadURL) {
                 saveCommentInDatabase(getTimestamp, downloadURL, newCommentInput);
             });
-            console.log("Dodało Plik")
+            //console.log("Dodało Plik")
         }).catch(e => {
-            console.log("Błąd wysyłania do bazy danych" + e);
+            //console.log("Błąd wysyłania do bazy danych" + e);
         })
 
     }
@@ -333,7 +332,7 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
     if (snapshot.exists()) {
         var getInfo = Object.entries(snapshot.val());
         if (user && user.emailVerified) {
-            console.log("test")
+            //console.log("test")
             /* TUTAJ POWINNA BYĆ OSBŁUGA WYŚWIETLANIA DODAWANIA POSTA
             W ZALEŻNOŚCI CZY UŻYTKOWNIK JEST ZALOGOWANY */
         }
@@ -505,9 +504,9 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
                                 newPostOptions.appendChild(createDeletingElement);
 
                                 /*Blokowanie użytkwonika który napisał komentarz */
-                                var createBlockingUserElement = document.createElement("i");
-                                createBlockingUserElement.setAttribute("class", "fas fa-user-lock");
-                                newPostOptions.appendChild(createBlockingUserElement);
+                                // var createBlockingUserElement = document.createElement("i");
+                                // createBlockingUserElement.setAttribute("class", "fas fa-user-lock");
+                                // newPostOptions.appendChild(createBlockingUserElement);
 
                             }
                         }
@@ -533,7 +532,7 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
                 getInfo.forEach((ex) => {
                     counter.push(ex);
                 });
-                console.log(counter.length)
+                //console.log(counter.length)
             }
 
             firebase
@@ -550,7 +549,7 @@ dbRef.child("threads/" + getUrlID + "/_responses").get().then((
 
 
     } else {
-        console.log("Brak odpowiedzi w wątku.");
+        //console.log("Brak odpowiedzi w wątku.");
     }
 })
 
@@ -573,7 +572,7 @@ function saveCommentInDatabase(getTimestamp, downloadURL, newCommentInput) {
                     location.assign("thread.html?id=" + getUrlID);
                 })
         } else {
-            console.log("error")
+            //console.log("error")
             document.getElementById("navLogin").href = "login.html"
         }
     });
@@ -606,11 +605,11 @@ firebase.auth().onAuthStateChanged((user) => {
                 threadTitle = snapshot.val().title;
                 threadAuthor = snapshot.val().author;
             } else {
-                console.log("No data available");
+                //console.log("No data available");
             }
         })
     } else {
-        console.log("Użytkownik nie jest zalogowany więc nie może pobrać danych wątku.")
+        //console.log("Użytkownik nie jest zalogowany więc nie może pobrać danych wątku.")
     }
 })
 
@@ -629,7 +628,7 @@ getBookmark.addEventListener("click", function () {
                     savedThreadTitle: threadTitle,
                 })
         } else {
-            console.log("Użytkownik niezalogowany więc nie może zapisać wątku.")
+           // console.log("Użytkownik niezalogowany więc nie może zapisać wątku.")
         }
     });
 
@@ -645,11 +644,11 @@ firebase.auth().onAuthStateChanged((user) => {
             if (snapshot.exists()) {
                 getBookmark.setAttribute("class", "fas fa-bookmark")
             } else {
-                console.log("Wątek jeszcze nie zapisany");
+               // console.log("Wątek jeszcze nie zapisany");
             }
         })
     } else {
-        console.log("Użytkownik nie jest zalogowany więc nie może pobrać danych wątku.")
+        //console.log("Użytkownik nie jest zalogowany więc nie może pobrać danych wątku.")
     }
 })
 /* ------------------------------------------------------------------------------------------------------------ */

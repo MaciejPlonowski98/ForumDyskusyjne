@@ -41,9 +41,9 @@ function newThread() {
             uploadFile.snapshot.ref.getDownloadURL().then(function getPhotoUrl(downloadURL) {
                 addNewThreadInMainContainer(timestamp, downloadURL)
             });
-            console.log("Dodało Plik")
+            //console.log("Dodało Plik")
         }).catch(e => {
-            console.log("Błąd wysyłania do bazy danych" + e);
+            //console.log("Błąd wysyłania do bazy danych" + e);
         })
     }
 
@@ -79,7 +79,7 @@ function addNewThreadInMainContainer(timestamp, downloadURL) {
                         location.assign("index.html")
                     })
             } else {
-                console.log("error")
+                //console.log("error")
                 document.getElementById("navLogin").href = "login.html"
             }
         });
@@ -170,7 +170,7 @@ dbRef.child("threads").get().then((
             thread.appendChild(threadRate)
         })
     } else {
-        console.log("No data available");
+        //console.log("No data available");
     }
 }).catch((error) => {
     console.error(error);

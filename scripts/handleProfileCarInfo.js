@@ -30,7 +30,7 @@
                         location.assign("account.html")
                     })
             } else {
-                console.log("error")
+                //console.log("error")
                 document.getElementById("navLogin").href = "login.html"
             }
         });
@@ -41,7 +41,7 @@
         // element i jego ID
         element.addEventListener("click", (e) => {
             var todo_id = e.target.parentNode.id;
-            console.log(todo_id);
+            //console.log(todo_id);
             firebase
                 .database()
                 .ref("/users/" + user_id + "/cars/" + todo_id)
@@ -92,14 +92,13 @@
 
                         carSingleBox.setAttribute("id", ex.CarId)
 
-                        console.log()
 
                         ownedVehicles.appendChild(carSingleBox)
                         deleteOwnedCar(createDeleteDiv, ex.CarId);
 
                     });
                 } else {
-                    console.log("No data available");
+                    //console.log("No data available");
                 }
             }).catch((error) => {
                 console.error(error);

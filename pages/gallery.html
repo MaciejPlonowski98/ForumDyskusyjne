@@ -13,6 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="/lib/lightbox2-2.11.3/dist/css/lightbox.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
 </head>
 
 <body>
@@ -48,7 +53,7 @@
         </div>
         <footer>
             <input type="file" name="uploadPhotoToGallery" id="uploadPhotoToGallery" accept="image/*">
-            <button class="uploadPhotoToGalleryButton" onclick="uploadFile()">Wyślij!</button>
+            <button class="uploadPhotoToGalleryButton btn btn-success" onclick="uploadFile()">Wyślij!</button>
         </footer>
     </main>
 
@@ -104,9 +109,9 @@
                     uploadFile.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                         uploadFileToDatabase(file, downloadURL)
                     });
-                    console.log("Dodało Plik")
+                    //console.log("Dodało Plik")
                 }).catch(e => {
-                    console.log("Błąd wysyłania do bazy danych" + e);
+                    //console.log("Błąd wysyłania do bazy danych" + e);
                 })
             });
         }
@@ -139,7 +144,7 @@
             if (snapshot.exists()) {
                 var getInfo = Object.entries(snapshot.val());
                 getInfo.map(([klucz, wartosc]) => {
-                    console.log(klucz, wartosc.author, wartosc.file_path)
+                    // console.log(klucz, wartosc.author, wartosc.file_path)
                     var getSmallPhotos = document.querySelector(".smallPhotos");
 
                     var createAElement = document.createElement("a");

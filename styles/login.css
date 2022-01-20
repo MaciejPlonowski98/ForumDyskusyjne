@@ -464,6 +464,82 @@ select {
     display: flex;
 }
 
-#chujwie{
-    display: none;
+/**** MEDIA ****/
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    /* ----------------------------------------- */
+
+    #firstNavElement {
+        width: 33%;
+    }
+
+    #siteLogo {
+        width: 100%;
+    }
+
+    #firstLogoElement {
+        font-size: 2vh;
+    }
+
+    #secondLogoElement {
+        font-size: 1.2vh;
+    }
+
+    #searchBox {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 25%;
+        width: 100%;
+    }
+
+    #secondNavElement {
+        width: 33%;
+    }
+
+
+    #thirdNavElement {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        width: 33%;
+    }
+
+    #thirdNavElement>a {
+        margin-top: 5%;
+        font-size: 1.4vh;
+    }
+}
+
+/*----- LOGIN SECTION ---- */
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    main {
+        width: 95vw;
+    }
+
+    #loginForm>input,
+    #registerForm>input,
+    select,
+    #forgotPasswordBox>input {
+        width: 95%;
+
+    }
+}
+
+@media only screen and (min-width: 767px) and (max-width: 768px) {
+    main {
+        width: 80vw;
+    }
+
+    #loginForm>input,
+    #registerForm>input,
+    select,
+    #forgotPasswordBox>input {
+        width: 95%;
+
+    }
 }

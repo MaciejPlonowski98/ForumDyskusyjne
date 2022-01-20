@@ -487,3 +487,125 @@ select:placeholder {
     font-size: 2vh;
     background-color: #B08968;
 }
+
+/**** MEDIA ****/
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    /* ----------------------------------------- */
+
+    #firstNavElement {
+        width: 33%;
+    }
+
+    #siteLogo {
+        width: 100%;
+    }
+
+    #firstLogoElement {
+        font-size: 2vh;
+    }
+
+    #secondLogoElement {
+        font-size: 1.2vh;
+    }
+
+    #searchBox {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 25%;
+        width: 100%;
+    }
+
+    #secondNavElement {
+        width: 33%;
+    }
+
+
+    #thirdNavElement {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        width: 33%;
+    }
+
+    #thirdNavElement>a {
+        margin-top: 5%;
+        font-size: 1.4vh;
+    }
+}
+
+/* --- TWOJE KONTO --- */
+@media only screen and (max-width: 320px),
+(max-width: 375px),
+(max-width: 425px) {
+    section {
+        flex-flow: column nowrap;
+
+    }
+
+    main {
+        height: 100%;
+        overflow: auto;
+        padding-bottom: 10vh;
+    }
+
+    .textBox {
+        margin-top: 0;
+        border-radius: 0;
+        width: 100%;
+        height: 10vh;
+    }
+
+    .accountInformation,
+    .profile,
+    .savedThreads {
+        margin-top: 5%;
+        width: 90%;
+        height: 70vh;
+    }
+
+    .accountInformation>div,
+    h1,
+    h3 {
+        margin-bottom: 3%;
+    }
+
+    .accountInformation>button,
+    #addNewVehicle {
+        height: 5vh;
+        margin-top: 3%;
+    }
+
+    .savedElement {
+        word-break: keep-all;
+    }
+
+    .changePasswordPopup,
+    .addVehiclePopup {
+        width: 90%;
+    }
+
+    .changePasswordPopup>input,
+    .addVehiclePopup>input,
+    select {
+        width: 95%;
+    }
+
+    .addVehiclePopup>button {
+        width: 90%;
+    }
+
+    .addVehiclePopup {
+        width: 90%;
+        position: absolute;
+        left: 50%;
+        top: calc(100% + 30vh);
+    }
+
+    .changePasswordPopup>.fa-times-circle {
+        font-size: 200%;
+    }
+}
